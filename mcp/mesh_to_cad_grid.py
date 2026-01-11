@@ -593,6 +593,199 @@ class MeshGridTessellator:
         }
     
     # ========================================================================
+    # SOLIDIFY: Convert surface skin to watertight solid shell
+    # ========================================================================
+    
+    def solidify_skin(self, thickness: float = 0.5, direction: str = "inward") -> Dict:
+        """
+        Convert the matrix skin (surface) into a watertight solid shell.
+        
+        This extrudes the surface by the specified thickness to create
+        actual 3D geometry that CAD software and 3D printers can use.
+        
+        The result is a proper manifold mesh with:
+        - Outer surface (original skin)
+        - Inner surface (offset by thickness)
+        - Side walls connecting the two at boundaries
+        
+        Args:
+            thickness: Shell wall thickness in mesh units (e.g., 0.8 mm)
+            direction: "inward" (shell goes inside), "outward" (shell goes outside),
+                      or "both" (half thickness each way)
+                      
+        Returns:
+            Dictionary with solidified mesh stats
+        """
+        print(f"\n{'='*60}")
+        print("SOLIDIFYING MATRIX SKIN (Creating Watertight Shell)")
+        print(f"{'='*60}")
+        print(f"  Shell thickness: {thickness}")
+        print(f"  Direction: {direction}")
+        import sys
+        sys.stdout.flush()
+        
+        if not hasattr(self, 'skin_vertices') or not hasattr(self, 'skin_quads'):
+            print("  ERROR: No matrix skin. Run create_matrix_skin() first.")
+            return None
+        
+        vertices = self.skin_vertices
+        quads = self.skin_quads
+        num_verts = len(vertices)
+        num_quads = len(quads)
+        
+        print(f"  Input: {num_verts:,} vertices, {num_quads:,} quads")
+        sys.stdout.flush()
+        
+        # Step 1: Calculate vertex normals for offset direction
+        print(f"  Step 1: Computing vertex normals...")
+        sys.stdout.flush()
+        
+        # Create trimesh from quads to compute normals
+        # First convert quads to triangles for trimesh
+        triangles = []
+        for q in quads:
+            # Quad [v0, v1, v2, v3] -> two triangles
+            triangles.append([q[0], q[1], q[2]])
+            triangles.append([q[0], q[2], q[3]])
+        
+        temp_mesh = trimesh.Trimesh(vertices=vertices, faces=triangles)
+        vertex_normals = temp_mesh.vertex_normals
+        
+        # Step 2: Create offset vertices (inner surface)
+        print(f"  Step 2: Creating offset surface...")
+        sys.stdout.flush()
+        
+        if direction == "inward":
+            offset_verts = vertices - vertex_normals * thickness
+            outer_verts = vertices.copy()
+        elif direction == "outward":
+            offset_verts = vertices + vertex_normals * thickness
+            outer_verts = vertices.copy()
+        else:  # both
+            half = thickness / 2
+            outer_verts = vertices + vertex_normals * half
+            offset_verts = vertices - vertex_normals * half
+        
+        # Step 3: Build solid mesh with both surfaces
+        print(f"  Step 3: Building solid shell geometry...")
+        sys.stdout.flush()
+        
+        # Combined vertices: [outer_surface, inner_surface]
+        solid_vertices = np.vstack([outer_verts, offset_verts])
+        
+        solid_faces = []
+        
+        # Outer surface faces (original orientation) - as triangles
+        for q in quads:
+            # Quad -> 2 triangles (CCW for outward normal)
+            solid_faces.append([q[0], q[1], q[2]])
+            solid_faces.append([q[0], q[2], q[3]])
+        
+        # Inner surface faces (reversed orientation - flipped winding)
+        # Inner vertices are at index + num_verts
+        for q in quads:
+            # Reversed winding for inward-facing normal
+            i0, i1, i2, i3 = q[0] + num_verts, q[1] + num_verts, q[2] + num_verts, q[3] + num_verts
+            solid_faces.append([i0, i2, i1])  # Reversed
+            solid_faces.append([i0, i3, i2])  # Reversed
+        
+        # Step 4: Find and seal boundary edges
+        print(f"  Step 4: Finding boundary edges to seal...")
+        sys.stdout.flush()
+        
+        # Count edge occurrences to find boundaries
+        edge_count = {}
+        for q in quads:
+            for i in range(4):
+                v1, v2 = q[i], q[(i + 1) % 4]
+                edge = tuple(sorted([v1, v2]))
+                edge_count[edge] = edge_count.get(edge, 0) + 1
+        
+        # Boundary edges appear only once
+        boundary_edges = [e for e, count in edge_count.items() if count == 1]
+        print(f"    Found {len(boundary_edges):,} boundary edges")
+        sys.stdout.flush()
+        
+        # Seal each boundary edge with a quad (connecting outer to inner)
+        for edge in boundary_edges:
+            v1_out, v2_out = edge
+            v1_in, v2_in = v1_out + num_verts, v2_out + num_verts
+            # Create quad to connect outer edge to inner edge
+            # Two triangles forming a quad wall
+            solid_faces.append([v1_out, v2_out, v2_in])
+            solid_faces.append([v1_out, v2_in, v1_in])
+        
+        # Step 5: Create final solid mesh
+        print(f"  Step 5: Creating watertight mesh...")
+        sys.stdout.flush()
+        
+        solid_mesh = trimesh.Trimesh(
+            vertices=solid_vertices,
+            faces=solid_faces
+        )
+        
+        # Clean up the mesh
+        solid_mesh.merge_vertices()
+        solid_mesh.fix_normals()
+        solid_mesh.fill_holes()
+        
+        # Store the solidified mesh
+        self.solid_mesh = solid_mesh
+        self.solid_thickness = thickness
+        
+        # Check if watertight
+        is_watertight = solid_mesh.is_watertight
+        volume = solid_mesh.volume if is_watertight else None
+        
+        print(f"\n  ✓ SOLIDIFIED SHELL CREATED!")
+        print(f"    - Vertices: {len(solid_mesh.vertices):,}")
+        print(f"    - Faces (triangles): {len(solid_mesh.faces):,}")
+        print(f"    - Watertight: {'✓ YES' if is_watertight else '✗ NO'}")
+        if volume:
+            print(f"    - Volume: {volume:.4f} cubic units")
+        print(f"    - Shell thickness: {thickness}")
+        sys.stdout.flush()
+        
+        return {
+            "vertices": len(solid_mesh.vertices),
+            "faces": len(solid_mesh.faces),
+            "watertight": is_watertight,
+            "volume": volume,
+            "thickness": thickness,
+            "boundary_edges_sealed": len(boundary_edges)
+        }
+    
+    def export_solid_mesh(self, output_path: str) -> str:
+        """
+        Export the solidified mesh to a file.
+        
+        Args:
+            output_path: Output file path (supports .obj, .stl, .glb, .ply)
+            
+        Returns:
+            Path to exported file
+        """
+        if not hasattr(self, 'solid_mesh'):
+            print("ERROR: No solid mesh. Run solidify_skin() first.")
+            return None
+        
+        output_path = Path(output_path)
+        
+        # Ensure directory exists
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Export based on extension
+        ext = output_path.suffix.lower()
+        
+        self.solid_mesh.export(str(output_path))
+        
+        print(f"✓ Exported solid mesh: {output_path}")
+        print(f"  Format: {ext}")
+        print(f"  Watertight: {self.solid_mesh.is_watertight}")
+        
+        return str(output_path)
+    
+    # ========================================================================
     # ANGULAR GROUPING: Group quads by surface continuity (180° threshold)
     # ========================================================================
     
@@ -2599,6 +2792,22 @@ def process_mesh(mesh_path: str, output_dir: str,
             matrix_skin_path, 
             shell_thickness=shell_thickness
         )
+        
+        # SOLIDIFY: Create watertight solid shell for CAD/manufacturing
+        print("\n" + "="*60)
+        print("CREATING WATERTIGHT SOLID FOR CAD DESIGNERS")
+        print("="*60)
+        solid_result = tessellator.solidify_skin(thickness=shell_thickness, direction="inward")
+        
+        if solid_result and tessellator.solid_mesh is not None:
+            solid_path = os.path.join(output_dir, f"{base_name}_solid_shell.obj")
+            outputs['solid_shell'] = tessellator.export_solid_mesh(solid_path)
+            
+            # Also export STL for 3D printing
+            stl_path = os.path.join(output_dir, f"{base_name}_solid_shell.stl")
+            tessellator.solid_mesh.export(stl_path)
+            outputs['solid_stl'] = stl_path
+            print(f"✓ Exported STL for 3D printing: {stl_path}")
         
         # Export wireframe version (tubes along edges)
         wireframe_path = os.path.join(output_dir, f"{base_name}_wireframe_skin.obj")

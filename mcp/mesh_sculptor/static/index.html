@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesh Sculptor - 3D CAD Editing Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            overflow: hidden;
+        }
+        
+        #app {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Sidebar */
+        #sidebar {
+            width: 320px;
+            background: #16213e;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #0f3460;
+        }
+        
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            color: #e94560;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .section h3 {
+            color: #e94560;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #e94560;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #ff6b6b;
+        }
+        
+        .btn-secondary {
+            background: #0f3460;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #1a4a7a;
+        }
+        
+        .btn-primary.active {
+            background: #00cc66;
+        }
+        
+        .btn-tool {
+            background: #2a2a4a;
+            color: #ccc;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-tool:hover {
+            background: #3a3a5a;
+        }
+        
+        .btn-tool.active {
+            background: #e94560;
+            color: white;
+        }
+        
+        .btn-tool .icon {
+            font-size: 1.2em;
+        }
+        
+        kbd {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        /* Sliders */
+        .slider-group {
+            margin-bottom: 15px;
+        }
+        
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+            color: #aaa;
+        }
+        
+        .slider-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #2a2a4a;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e94560;
+            cursor: pointer;
+        }
+        
+        /* Info display */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.85em;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #888;
+        }
+        
+        .info-value {
+            color: #4ecca3;
+            font-family: monospace;
+        }
+        
+        /* Canvas area */
+        #canvas-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Status bar */
+        #status-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+        }
+        
+        #status-bar .left {
+            color: #4ecca3;
+        }
+        
+        #status-bar .right {
+            color: #888;
+        }
+        
+        /* Toolbar overlay */
+        #toolbar-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .toolbar-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .toolbar-btn:hover {
+            background: rgba(233, 69, 96, 0.8);
+        }
+        
+        .toolbar-btn.active {
+            background: #e94560;
+        }
+        
+        /* Brush cursor */
+        #brush-cursor {
+            position: absolute;
+            border: 2px solid rgba(233, 69, 96, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        
+        /* Loading overlay */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #loading.hidden {
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #333;
+            border-top-color: #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        #loading p {
+            margin-top: 15px;
+            color: #888;
+        }
+        
+        /* File input hidden */
+        #file-input {
+            display: none;
+        }
+        
+        /* Help text */
+        .help-text {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        
+        /* Keyboard shortcuts */
+        kbd {
+            background: #2a2a4a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.85em;
+        }
+        
+        /* Debug panel */
+        #debug-panel {
+            position: absolute;
+            bottom: 40px;
+            right: 10px;
+            width: 400px;
+            max-height: 200px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #e94560;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 11px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        
+        #debug-header {
+            background: #e94560;
+            color: white;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #debug-header button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        #debug-log {
+            height: 160px;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        
+        .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #333;
+            word-wrap: break-word;
+        }
+        
+        .log-entry.info { color: #4ecdc4; }
+        .log-entry.warn { color: #feca57; }
+        .log-entry.error { color: #ff6b6b; }
+        .log-entry.success { color: #26de81; }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <p id="loading-text">Loading...</p>
+    </div>
+    
+    <div id="app">
+        <div id="sidebar">
+            <h1>🎨 Mesh Sculptor</h1>
+            <p class="subtitle">Ornakala Skin Matrix Editor<br>Developer: A2</p>
+            
+            <!-- File Section -->
+            <div class="section">
+                <h3>📁 File</h3>
+                <button class="btn btn-primary" onclick="loadSampleMesh()">Load Sample Ring</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('file-input').click()">Upload OBJ/STL</button>
+                <input type="file" id="file-input" accept=".obj,.stl,.glb,.ply" onchange="uploadFile(this)">
+                <button class="btn btn-secondary" onclick="exportMesh('obj')">Export OBJ</button>
+                <button class="btn btn-secondary" onclick="exportMesh('stl')">Export STL (Wax Print)</button>
+            </div>
+            
+            <!-- Tools Section -->
+            <div class="section">
+                <h3>🔧 Sculpting Tools</h3>
+                <button class="btn btn-tool active" data-tool="raise" onclick="selectTool('raise')">
+                    <span class="icon">⬆️</span>
+                    <span>Raise (Push Out)</span>
+                </button>
+                <button class="btn btn-tool" data-tool="lower" onclick="selectTool('lower')">
+                    <span class="icon">⬇️</span>
+                    <span>Lower (Push In)</span>
+                </button>
+                <button class="btn btn-tool" data-tool="flatten" onclick="selectTool('flatten')">
+                    <span class="icon">➖</span>
+                    <span>Flatten</span>
+                </button>
+                <button class="btn btn-tool" data-tool="smooth" onclick="selectTool('smooth')">
+                    <span class="icon">🌊</span>
+                    <span>Smooth</span>
+                </button>
+                <button class="btn btn-tool" data-tool="pinch" onclick="selectTool('pinch')">
+                    <span class="icon">🤏</span>
+                    <span>Pinch/Sharpen</span>
+                </button>
+            </div>
+            
+            <!-- Selection & Duplicate Tools -->
+            <div class="section">
+                <h3>✂️ Select & Transform</h3>
+                <button id="select-mode-btn" class="btn btn-secondary" onclick="toggleSelectMode()">
+                    ☐ Select Mode
+                </button>
+                <div class="info-row" style="margin-top: 10px;">
+                    <span class="info-label">Selected</span>
+                    <span class="info-value" id="selection-info">None</span>
+                </div>
+                
+                <!-- Elongate Tool -->
+                <button id="elongate-btn" class="btn btn-primary" onclick="startElongate()" style="display: none; margin-top: 10px; background: #ff9900;">
+                    ↕️ Elongate Along Normal
+                </button>
+                <div id="elongate-controls" style="display: none; margin-top: 10px; padding: 10px; background: rgba(255,153,0,0.1); border-radius: 5px;">
+                    <p style="font-size: 0.8em; margin-bottom: 8px;">Drag up/down to elongate selection along its surface angle</p>
+                    <button class="btn btn-primary" onclick="confirmElongate()" style="background: #00cc66;">
+                        ✓ Apply
+                    </button>
+                    <button class="btn btn-secondary" onclick="cancelElongate()">
+                        ✕ Cancel
+                    </button>
+                </div>
+                
+                <!-- Duplicate Tools -->
+                <button id="duplicate-btn" class="btn btn-primary" onclick="duplicateSelection()" style="display: none; margin-top: 10px;">
+                    📋 Duplicate Selection
+                </button>
+                <button id="place-duplicate-btn" class="btn btn-primary" onclick="placeDuplicate()" style="display: none; margin-top: 5px; background: #00cc66;">
+                    ✓ Place Duplicate
+                </button>
+                <button id="cancel-duplicate-btn" class="btn btn-secondary" onclick="cancelDuplicate()" style="display: none; margin-top: 5px;">
+                    ✕ Cancel
+                </button>
+                <button class="btn btn-secondary" onclick="clearSelection()" style="margin-top: 5px;">
+                    Clear Selection
+                </button>
+            </div>
+            
+            <!-- Carve Block Tool -->
+            <div class="section">
+                <h3>🔲 Carve Block</h3>
+                <button id="carve-mode-btn" class="btn btn-secondary" onclick="toggleCarveMode()">
+                    🔲 Carve Block
+                </button>
+                <div id="carve-controls" style="display: none; margin-top: 15px;">
+                    <div class="slider-group">
+                        <label>
+                            <span>Width</span>
+                            <span id="carve-width-value">2.0</span>
+                        </label>
+                        <input type="range" id="carve-width" min="0.5" max="10" step="0.1" value="2.0" 
+                               oninput="updateCarveWidth(this.value)">
+                    </div>
+                    <div class="slider-group">
+                        <label>
+                            <span>Height</span>
+                            <span id="carve-height-value">2.0</span>
+                        </label>
+                        <input type="range" id="carve-height" min="0.5" max="10" step="0.1" value="2.0" 
+                               oninput="updateCarveHeight(this.value)">
+                    </div>
+                    <div class="slider-group">
+                        <label>
+                            <span>Depth</span>
+                            <span id="carve-depth-value">1.0</span>
+                        </label>
+                        <input type="range" id="carve-depth" min="0.1" max="5" step="0.1" value="1.0" 
+                               oninput="updateCarveDepth(this.value)">
+                    </div>
+                    <p style="font-size: 0.75em; color: #888; margin-top: 5px;">
+                        Click to carve. Depth × Strength = carve amount.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Oval/Stretch Tool -->
+            <div class="section">
+                <h3>⬭ Stretch/Oval</h3>
+                <p style="font-size: 0.8em; color: #aaa; margin-bottom: 10px;">
+                    Stretch the entire mesh along an axis to make circles into ovals
+                </p>
+                <div class="slider-group">
+                    <label>
+                        <span>X Scale</span>
+                        <span id="stretch-x-value">100%</span>
+                    </label>
+                    <input type="range" id="stretch-x" min="50" max="200" step="1" value="100" 
+                           oninput="updateStretchPreview()">
+                </div>
+                <div class="slider-group">
+                    <label>
+                        <span>Y Scale</span>
+                        <span id="stretch-y-value">100%</span>
+                    </label>
+                    <input type="range" id="stretch-y" min="50" max="200" step="1" value="100" 
+                           oninput="updateStretchPreview()">
+                </div>
+                <div class="slider-group">
+                    <label>
+                        <span>Z Scale</span>
+                        <span id="stretch-z-value">100%</span>
+                    </label>
+                    <input type="range" id="stretch-z" min="50" max="200" step="1" value="100" 
+                           oninput="updateStretchPreview()">
+                </div>
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-primary" onclick="applyStretch()" style="background: #00cc66;">
+                        ✓ Apply Stretch
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetStretch()">
+                        ↺ Reset
+                    </button>
+                </div>
+            </div>
+                        
+            <!-- Brush Settings -->
+            <div class="section">
+                <h3>🖌️ Brush Settings</h3>
+                
+                <!-- Grid Mode Toggle -->
+                <button id="grid-mode-btn" class="btn btn-primary active" onclick="toggleGridMode()" style="margin-bottom: 15px;">
+                    ▦ Grid: ON
+                </button>
+                
+                <!-- Cell Size Control -->
+                <div class="slider-group" id="cell-size-group">
+                    <label>
+                        <span>Cell Size (mm)</span>
+                        <span id="cell-size-value">0.18</span>
+                    </label>
+                    <input type="range" id="cell-size" min="0.05" max="1.0" step="0.01" value="0.18" 
+                           oninput="updateCellSize(this.value)">
+                </div>
+                
+                <!-- Grid Brush Size (cells) -->
+                <div class="slider-group" id="grid-size-group">
+                    <label>
+                        <span>Grid Cells</span>
+                        <span id="grid-brush-size-value">3x3</span>
+                    </label>
+                    <input type="range" id="grid-brush-size" min="1" max="10" step="1" value="3" 
+                           oninput="updateGridBrushSize(this.value)">
+                </div>
+                
+                <!-- Circular Brush Size -->
+                <div class="slider-group" id="circular-size-group" style="display: none;">
+                    <label>
+                        <span>Brush Size</span>
+                        <span id="brush-size-value">2.0</span>
+                    </label>
+                    <input type="range" id="brush-size" min="0.5" max="10" step="0.1" value="2.0" 
+                           oninput="updateBrushSize(this.value)">
+                </div>
+                
+                <div class="slider-group">
+                    <label>
+                        <span>Strength</span>
+                        <span id="brush-strength-value">0.3</span>
+                    </label>
+                    <input type="range" id="brush-strength" min="0.01" max="1" step="0.01" value="0.3"
+                           oninput="updateBrushStrength(this.value)">
+                </div>
+                <div class="slider-group" id="falloff-group" style="display: none;">
+                    <label>
+                        <span>Falloff</span>
+                        <span id="brush-falloff-value">0.5</span>
+                    </label>
+                    <input type="range" id="brush-falloff" min="0" max="1" step="0.05" value="0.5"
+                           oninput="updateBrushFalloff(this.value)">
+                </div>
+            </div>
+            
+            <!-- View Controls -->
+            <div class="section">
+                <h3>👁️ View</h3>
+                <button class="btn btn-secondary" onclick="resetCamera()">Reset Camera</button>
+                <button class="btn btn-secondary" onclick="toggleWireframe()">Toggle Wireframe</button>
+                <button class="btn btn-secondary" onclick="toggleNormals()">Show Normals</button>
+            </div>
+            
+            <!-- Mesh Info -->
+            <div class="section">
+                <h3>📊 Mesh Info</h3>
+                <div class="info-row">
+                    <span class="info-label">Vertices</span>
+                    <span class="info-value" id="info-vertices">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Faces</span>
+                    <span class="info-value" id="info-faces">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Dimensions</span>
+                    <span class="info-value" id="info-dimensions">-</span>
+                </div>
+            </div>
+            
+            <!-- History -->
+            <div class="section">
+                <h3>↩️ History</h3>
+                <button class="btn btn-secondary" onclick="undo()">Undo <kbd>Ctrl+Z</kbd></button>
+                <button class="btn btn-secondary" onclick="redo()">Redo <kbd>Ctrl+Y</kbd></button>
+            </div>
+            
+            <!-- Help -->
+            <div class="help-text">
+                <strong>Controls:</strong><br>
+                • Left-click + drag: Sculpt<br>
+                • Right-click + drag: Rotate view<br>
+                • Scroll: Zoom<br>
+                • <kbd>[</kbd> / <kbd>]</kbd>: Brush size<br>
+                • <kbd>Shift</kbd> + drag: Invert tool
+            </div>
+        </div>
+        
+        <div id="canvas-container">
+            <canvas id="canvas"></canvas>
+            
+            <div id="toolbar-overlay">
+                <button class="toolbar-btn" onclick="selectTool('raise')" title="Raise">⬆️</button>
+                <button class="toolbar-btn" onclick="selectTool('lower')" title="Lower">⬇️</button>
+                <button class="toolbar-btn" onclick="selectTool('flatten')" title="Flatten">➖</button>
+                <button class="toolbar-btn" onclick="selectTool('smooth')" title="Smooth">🌊</button>
+            </div>
+            
+            <div id="brush-cursor"></div>
+            
+            <div id="status-bar">
+                <span class="left" id="status-text">Ready. Load a mesh to start sculpting.</span>
+                <span class="right" id="status-coords">X: 0 Y: 0 Z: 0</span>
+            </div>
+            
+            <!-- Debug Panel -->
+            <div id="debug-panel">
+                <div id="debug-header">
+                    <span>🔧 Debug Log</span>
+                    <button onclick="clearDebugLog()">Clear</button>
+                </div>
+                <div id="debug-log"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/helpers/VertexNormalsHelper.js"></script>
+    
+    <script src="/static/sculptor.js"></script>
+</body>
+</html>
