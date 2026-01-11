@@ -337,35 +337,51 @@ def scale_and_calculate(mesh_path: str,
             'new_dimensions': original_dims
         }
     
-    # Get final dimensions
-    final_dims = scaler.get_current_dimensions()
-    
-    # Calculate volume and cost
-    volume_result = scaler.calculate_volume(shell_thickness)
-    cost_result = scaler.calculate_material_cost(
-        shell_thickness=shell_thickness,
-        material_density=material_density,
-        cost_per_gram=cost_per_gram,
-        unit_scale=0.1  # Assuming model units are mm, convert to cm
-    )
-    
     # Generate output path if output_dir provided
+    temp_dims = scaler.get_current_dimensions()
     if output_dir and not output_path:
         base_name = Path(mesh_path).stem
-        w = final_dims['width']
-        h = final_dims['height']
-        d = final_dims['depth']
+        w = temp_dims['width']
+        h = temp_dims['height']
+        d = temp_dims['depth']
         output_path = f"{output_dir}/{base_name}_scaled_{w:.1f}x{h:.1f}x{d:.1f}mm.obj"
     
-    # Export if requested
+    # STEP 1: Export scaled CAD file FIRST
     exported_file = None
     if output_path:
         exported_file = scaler.export_scaled_mesh(output_path)
+        
+        # STEP 2: Re-load the exported file to verify dimensions
+        print(f"\n🔄 VERIFYING: Re-loading exported CAD file...")
+        verified_scaler = MeshDimensionScaler(exported_file)
+        final_dims = verified_scaler.get_current_dimensions()
+        
+        # STEP 3: Calculate volume and cost from the VERIFIED exported file
+        print(f"✓ Calculating costs from verified CAD file dimensions")
+        volume_result = verified_scaler.calculate_volume(shell_thickness)
+        cost_result = verified_scaler.calculate_material_cost(
+            shell_thickness=shell_thickness,
+            material_density=material_density,
+            cost_per_gram=cost_per_gram,
+            unit_scale=0.1  # Assuming model units are mm, convert to cm
+        )
+    else:
+        # No export requested - calculate from in-memory mesh
+        final_dims = scaler.get_current_dimensions()
+        volume_result = scaler.calculate_volume(shell_thickness)
+        cost_result = scaler.calculate_material_cost(
+            shell_thickness=shell_thickness,
+            material_density=material_density,
+            cost_per_gram=cost_per_gram,
+            unit_scale=0.1
+        )
     
     # Print comprehensive summary
     print("\n" + "="*60)
     print("📋 MANUFACTURING SPECIFICATION SUMMARY")
     print("="*60)
+    if exported_file:
+        print("   ✓ Dimensions verified from exported CAD file")
     print(f"\n📐 DIMENSIONS:")
     print(f"   Width (X):     {final_dims['width']:.2f} mm")
     print(f"   Height (Y):    {final_dims['height']:.2f} mm")
@@ -395,7 +411,8 @@ def scale_and_calculate(mesh_path: str,
             'width_mm': float(final_dims['width']),
             'height_mm': float(final_dims['height']),
             'depth_mm': float(final_dims['depth']),
-            'shell_thickness_mm': float(shell_thickness)
+            'shell_thickness_mm': float(shell_thickness),
+            'verified_from_cad_file': exported_file is not None
         },
         'volume': {
             'surface_area_mm2': float(volume_result['surface_area']),
