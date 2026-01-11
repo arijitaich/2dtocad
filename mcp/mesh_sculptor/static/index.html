@@ -359,6 +359,98 @@
         .log-entry.warn { color: #feca57; }
         .log-entry.error { color: #ff6b6b; }
         .log-entry.success { color: #26de81; }
+        
+        /* Material Info Panel - on canvas */
+        #material-info-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 280px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid #4ecdc4;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        
+        #material-info-header {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        #material-info-header button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        #material-info-header button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        #material-info-content {
+            padding: 10px;
+        }
+        
+        .material-info-section {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .material-info-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .material-info-section-title {
+            color: #4ecdc4;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .material-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+        }
+        
+        .material-info-label {
+            color: #888;
+        }
+        
+        .material-info-value {
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .material-info-value.highlight-gold {
+            color: #ffd700;
+            font-size: 16px;
+        }
+        
+        .material-info-value.highlight-green {
+            color: #26de81;
+        }
+        
+        #material-info-panel.collapsed #material-info-content {
+            display: none;
+        }
+        .log-entry.success { color: #26de81; }
     </style>
 </head>
 <body>
@@ -587,6 +679,9 @@
                 <button class="btn btn-secondary" onclick="resetCamera()">Reset Camera</button>
                 <button class="btn btn-secondary" onclick="toggleWireframe()">Toggle Wireframe</button>
                 <button class="btn btn-secondary" onclick="toggleNormals()">Show Normals</button>
+                <button id="dimensions-btn" class="btn btn-primary active" onclick="toggleDimensions()" style="margin-top: 5px;">
+                    📏 Dimensions: ON
+                </button>
             </div>
             
             <!-- Mesh Info -->
@@ -604,6 +699,103 @@
                     <span class="info-label">Dimensions</span>
                     <span class="info-value" id="info-dimensions">-</span>
                 </div>
+            </div>
+            
+            <!-- Material & Cost Calculator -->
+            <div class="section">
+                <h3>💰 Material & Cost</h3>
+                
+                <!-- Material Selection -->
+                <div class="slider-group">
+                    <label>
+                        <span>Material</span>
+                    </label>
+                    <select id="material-select" onchange="onMaterialChange()" style="width: 100%; padding: 8px; border-radius: 4px; background: #16213e; color: white; border: 1px solid #0f3460;">
+                        <option value="gold">Gold (19.3 g/cm³)</option>
+                        <option value="silver">Silver (10.5 g/cm³)</option>
+                        <option value="platinum">Platinum (21.45 g/cm³)</option>
+                        <option value="palladium">Palladium (12.0 g/cm³)</option>
+                        <option value="brass">Brass (8.5 g/cm³)</option>
+                        <option value="steel">Stainless Steel (8.0 g/cm³)</option>
+                        <option value="titanium">Titanium (4.5 g/cm³)</option>
+                        <option value="resin">Wax/Resin (1.1 g/cm³)</option>
+                        <option value="custom">Custom...</option>
+                    </select>
+                </div>
+                
+                <!-- Shell Thickness (for cost calculation only) -->
+                <div class="slider-group">
+                    <label>
+                        <span>Shell Thickness (mm)</span>
+                        <span id="shell-thickness-value">0.8</span>
+                    </label>
+                    <input type="range" id="shell-thickness" min="0.3" max="2.0" step="0.1" value="0.8" 
+                           oninput="updateMaterialCost()">
+                    <small style="color: #888; font-size: 10px;">Used for material cost estimate only</small>
+                </div>
+                
+                <!-- Custom Density (hidden by default) -->
+                <div class="slider-group" id="custom-density-group" style="display: none;">
+                    <label>
+                        <span>Custom Density (g/cm³)</span>
+                        <span id="custom-density-value">10.0</span>
+                    </label>
+                    <input type="range" id="custom-density" min="1.0" max="25.0" step="0.1" value="10.0" 
+                           oninput="updateMaterialCost()">
+                </div>
+                
+                <!-- Cost per Gram -->
+                <div class="slider-group">
+                    <label>
+                        <span>Cost per Gram ($)</span>
+                        <span id="cost-per-gram-value">85.00</span>
+                    </label>
+                    <input type="range" id="cost-per-gram" min="0.1" max="200" step="0.1" value="85" 
+                           oninput="updateMaterialCost()">
+                </div>
+                
+                <!-- Calculated Values Display -->
+                <div style="background: #0a1628; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 12px;">
+                    <div class="info-row">
+                        <span class="info-label">Width (X)</span>
+                        <span class="info-value" id="calc-width">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Height (Y)</span>
+                        <span class="info-value" id="calc-height">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Depth (Z)</span>
+                        <span class="info-value" id="calc-depth">-</span>
+                    </div>
+                    <hr style="border-color: #1a3a5c; margin: 8px 0;">
+                    <div class="info-row">
+                        <span class="info-label">Surface Area</span>
+                        <span class="info-value" id="calc-surface-area">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Shell Volume</span>
+                        <span class="info-value" id="calc-shell-volume">-</span>
+                    </div>
+                    <hr style="border-color: #1a3a5c; margin: 8px 0;">
+                    <div class="info-row">
+                        <span class="info-label">Density</span>
+                        <span class="info-value" id="calc-density">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Weight</span>
+                        <span class="info-value" id="calc-weight">-</span>
+                    </div>
+                    <hr style="border-color: #1a3a5c; margin: 8px 0;">
+                    <div class="info-row" style="font-size: 14px; font-weight: bold;">
+                        <span class="info-label" style="color: #4ecdc4;">Est. Cost</span>
+                        <span class="info-value" id="calc-cost" style="color: #ffd700; font-size: 16px;">-</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="updateMaterialCost()" style="margin-top: 10px;">
+                    🔄 Recalculate
+                </button>
             </div>
             
             <!-- History -->
@@ -639,6 +831,79 @@
             <div id="status-bar">
                 <span class="left" id="status-text">Ready. Load a mesh to start sculpting.</span>
                 <span class="right" id="status-coords">X: 0 Y: 0 Z: 0</span>
+            </div>
+            
+            <!-- Material Info Panel - On Canvas -->
+            <div id="material-info-panel">
+                <div id="material-info-header">
+                    <span>💰 Material & Cost</span>
+                    <button onclick="toggleMaterialInfoPanel()">_</button>
+                </div>
+                <div id="material-info-content">
+                    <!-- Dimensions Section -->
+                    <div class="material-info-section">
+                        <div class="material-info-section-title">📐 Dimensions</div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Width (X)</span>
+                            <span class="material-info-value" id="canvas-dim-x">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Height (Y)</span>
+                            <span class="material-info-value" id="canvas-dim-y">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Depth (Z)</span>
+                            <span class="material-info-value" id="canvas-dim-z">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Surface & Volume Section -->
+                    <div class="material-info-section">
+                        <div class="material-info-section-title">📊 Geometry</div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Surface Area</span>
+                            <span class="material-info-value" id="canvas-surface-area">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Shell Thickness</span>
+                            <span class="material-info-value" id="canvas-shell-thickness">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Shell Volume</span>
+                            <span class="material-info-value" id="canvas-shell-volume">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Material Section -->
+                    <div class="material-info-section">
+                        <div class="material-info-section-title">🧱 Material</div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Material</span>
+                            <span class="material-info-value" id="canvas-material">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Density</span>
+                            <span class="material-info-value" id="canvas-density">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Weight</span>
+                            <span class="material-info-value highlight-green" id="canvas-weight">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Cost Section -->
+                    <div class="material-info-section">
+                        <div class="material-info-section-title">💵 Cost</div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Cost/Gram</span>
+                            <span class="material-info-value" id="canvas-cost-per-gram">-</span>
+                        </div>
+                        <div class="material-info-row">
+                            <span class="material-info-label">Est. Total</span>
+                            <span class="material-info-value highlight-gold" id="canvas-total-cost">-</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Debug Panel -->

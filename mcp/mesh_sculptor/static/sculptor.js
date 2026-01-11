@@ -89,6 +89,43 @@ let wireframeMode = false;
 let showNormalsMode = false;
 let normalsHelper = null;
 
+// Dimension lines state
+let showDimensions = true;
+let dimensionLinesGroup = null; // Group containing all dimension lines
+let dimensionLabels = []; // CSS2D labels for dimensions
+
+// Material densities (g/cm³)
+const MATERIAL_DENSITIES = {
+    gold: 19.3,
+    silver: 10.5,
+    platinum: 21.45,
+    palladium: 12.0,
+    brass: 8.5,
+    steel: 8.0,
+    titanium: 4.5,
+    resin: 1.1,
+    custom: 10.0
+};
+
+// Default cost per gram for materials ($)
+const MATERIAL_COSTS = {
+    gold: 85.0,
+    silver: 1.0,
+    platinum: 35.0,
+    palladium: 45.0,
+    brass: 0.02,
+    steel: 0.01,
+    titanium: 0.10,
+    resin: 0.05,
+    custom: 10.0
+};
+
+// Shell/Solidify state
+let shellMesh = null; // Inner shell mesh for preview
+let shellEnabled = true; // Whether to show shell preview
+let currentShellThickness = 0.8; // Current shell thickness in mm
+let vertexNormalsCache = null; // Cache for vertex normals
+
 // History for undo/redo
 const MAX_HISTORY = 50;
 let history = [];
@@ -538,6 +575,12 @@ function loadMeshData(data) {
     
     // Update info panel
     updateMeshInfo(data.info);
+    
+    // Create dimension lines
+    updateDimensionLines();
+    
+    // Calculate initial material cost
+    updateMaterialCost();
     
     // Reset history
     history = [];
@@ -1276,6 +1319,12 @@ function updateStretchPreview() {
     mesh.geometry.computeVertexNormals();
     mesh.geometry.computeBoundingBox();
     
+    // Update dimension lines to show new sizes
+    updateDimensionLines();
+    
+    // Update material cost calculations
+    updateMaterialCost();
+    
     debugLog(`Stretch preview: X=${scaleX.toFixed(2)} Y=${scaleY.toFixed(2)} Z=${scaleZ.toFixed(2)}`, 'info');
 }
 
@@ -1302,6 +1351,9 @@ function applyStretch() {
     
     // Update mesh info display
     updateMeshInfo();
+    
+    // Update material cost
+    updateMaterialCost();
     
     debugLog('Stretch applied permanently', 'success');
     setStatus('Stretch applied');
@@ -1335,6 +1387,658 @@ function resetStretch() {
     
     debugLog('Stretch reset to original', 'info');
     setStatus('Stretch reset');
+    
+    // Update dimension lines
+    updateDimensionLines();
+    
+    // Update material cost calculations
+    updateMaterialCost();
+}
+
+// ============================================================
+// DIMENSION LINES
+// ============================================================
+
+function updateDimensionLines() {
+    if (!mesh || !mesh.geometry) return;
+    
+    // Remove existing dimension lines
+    if (dimensionLinesGroup) {
+        scene.remove(dimensionLinesGroup);
+        dimensionLinesGroup = null;
+    }
+    
+    // Remove existing labels from DOM
+    dimensionLabels.forEach(label => {
+        if (label.element && label.element.parentNode) {
+            label.element.parentNode.removeChild(label.element);
+        }
+    });
+    dimensionLabels = [];
+    
+    if (!showDimensions) return;
+    
+    // Get mesh bounding box
+    mesh.geometry.computeBoundingBox();
+    const box = mesh.geometry.boundingBox;
+    const min = box.min;
+    const max = box.max;
+    
+    // Calculate dimensions
+    const width = max.x - min.x;   // X axis
+    const height = max.y - min.y;  // Y axis
+    const depth = max.z - min.z;   // Z axis
+    
+    // Create group for all dimension elements
+    dimensionLinesGroup = new THREE.Group();
+    
+    // Offset for dimension lines (how far from mesh)
+    const offset = Math.max(width, height, depth) * 0.15;
+    
+    // Arrow size
+    const arrowSize = Math.max(width, height, depth) * 0.05;
+    
+    // Colors for each axis
+    const colors = {
+        x: 0xff4444, // Red for X
+        y: 0x44ff44, // Green for Y
+        z: 0x4444ff  // Blue for Z
+    };
+    
+    // Create X dimension line (width) - along bottom front
+    createDimensionLine(
+        new THREE.Vector3(min.x, min.y - offset, max.z + offset),
+        new THREE.Vector3(max.x, min.y - offset, max.z + offset),
+        width,
+        'X',
+        colors.x,
+        arrowSize
+    );
+    
+    // Create Y dimension line (height) - along right side
+    createDimensionLine(
+        new THREE.Vector3(max.x + offset, min.y, max.z + offset),
+        new THREE.Vector3(max.x + offset, max.y, max.z + offset),
+        height,
+        'Y',
+        colors.y,
+        arrowSize
+    );
+    
+    // Create Z dimension line (depth) - along bottom right
+    createDimensionLine(
+        new THREE.Vector3(max.x + offset, min.y - offset, min.z),
+        new THREE.Vector3(max.x + offset, min.y - offset, max.z),
+        depth,
+        'Z',
+        colors.z,
+        arrowSize
+    );
+    
+    scene.add(dimensionLinesGroup);
+    
+    debugLog(`Dimensions: X=${width.toFixed(2)}mm Y=${height.toFixed(2)}mm Z=${depth.toFixed(2)}mm`, 'info');
+}
+
+function createDimensionLine(start, end, measurement, axis, color, arrowSize) {
+    // Create main line
+    const lineMaterial = new THREE.LineBasicMaterial({ 
+        color: color,
+        linewidth: 2
+    });
+    
+    // Main dimension line
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints([start, end]);
+    const line = new THREE.Line(lineGeometry, lineMaterial);
+    dimensionLinesGroup.add(line);
+    
+    // Calculate direction
+    const direction = new THREE.Vector3().subVectors(end, start).normalize();
+    
+    // Create arrows at both ends
+    createArrow(start, direction, color, arrowSize);
+    createArrow(end, direction.clone().negate(), color, arrowSize);
+    
+    // Create extension lines (perpendicular ticks at ends)
+    const tickSize = arrowSize * 0.5;
+    createExtensionTick(start, axis, color, tickSize);
+    createExtensionTick(end, axis, color, tickSize);
+    
+    // Create label in the middle
+    const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+    createDimensionLabel(midpoint, measurement, axis, color);
+}
+
+function createArrow(position, direction, color, size) {
+    // Create arrow head as a cone
+    const arrowGeometry = new THREE.ConeGeometry(size * 0.4, size, 8);
+    const arrowMaterial = new THREE.MeshBasicMaterial({ color: color });
+    const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+    
+    arrow.position.copy(position);
+    
+    // Rotate arrow to point in direction
+    const quaternion = new THREE.Quaternion();
+    const up = new THREE.Vector3(0, 1, 0);
+    quaternion.setFromUnitVectors(up, direction);
+    arrow.setRotationFromQuaternion(quaternion);
+    
+    dimensionLinesGroup.add(arrow);
+}
+
+function createExtensionTick(position, axis, color, size) {
+    const lineMaterial = new THREE.LineBasicMaterial({ color: color });
+    
+    let p1, p2;
+    
+    // Create perpendicular tick based on axis
+    if (axis === 'X') {
+        p1 = new THREE.Vector3(position.x, position.y - size, position.z);
+        p2 = new THREE.Vector3(position.x, position.y + size, position.z);
+    } else if (axis === 'Y') {
+        p1 = new THREE.Vector3(position.x - size, position.y, position.z);
+        p2 = new THREE.Vector3(position.x + size, position.y, position.z);
+    } else {
+        p1 = new THREE.Vector3(position.x, position.y - size, position.z);
+        p2 = new THREE.Vector3(position.x, position.y + size, position.z);
+    }
+    
+    const geometry = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+    const tick = new THREE.Line(geometry, lineMaterial);
+    dimensionLinesGroup.add(tick);
+}
+
+function createDimensionLabel(position, measurement, axis, color) {
+    // Create HTML element for label
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'dimension-label';
+    labelDiv.style.cssText = `
+        position: absolute;
+        background: rgba(0, 0, 0, 0.8);
+        color: #${color.toString(16).padStart(6, '0')};
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        pointer-events: none;
+        white-space: nowrap;
+        border: 1px solid #${color.toString(16).padStart(6, '0')};
+        z-index: 1000;
+    `;
+    labelDiv.textContent = `${axis}: ${measurement.toFixed(2)} mm`;
+    
+    document.body.appendChild(labelDiv);
+    
+    // Store label info for updating position in render loop
+    dimensionLabels.push({
+        element: labelDiv,
+        position: position.clone(),
+        axis: axis
+    });
+    
+    // Update label position immediately
+    updateDimensionLabelPositions();
+}
+
+function updateDimensionLabelPositions() {
+    const canvas = document.getElementById('canvas');
+    const rect = canvas.getBoundingClientRect();
+    
+    dimensionLabels.forEach(label => {
+        // Project 3D position to 2D screen coordinates
+        const pos = label.position.clone();
+        pos.project(camera);
+        
+        // Convert to screen coordinates
+        const x = (pos.x * 0.5 + 0.5) * rect.width + rect.left;
+        const y = (-pos.y * 0.5 + 0.5) * rect.height + rect.top;
+        
+        // Check if behind camera
+        if (pos.z > 1) {
+            label.element.style.display = 'none';
+        } else {
+            label.element.style.display = 'block';
+            label.element.style.left = `${x}px`;
+            label.element.style.top = `${y}px`;
+            label.element.style.transform = 'translate(-50%, -50%)';
+        }
+    });
+}
+
+function toggleDimensions() {
+    showDimensions = !showDimensions;
+    updateDimensionLines();
+    
+    // Update button state
+    const btn = document.getElementById('dimensions-btn');
+    if (btn) {
+        btn.textContent = `📏 Dimensions: ${showDimensions ? 'ON' : 'OFF'}`;
+        btn.classList.toggle('active', showDimensions);
+    }
+    
+    debugLog(`Dimension lines: ${showDimensions ? 'ON' : 'OFF'}`, 'info');
+}
+
+// ============================================================
+// MATERIAL & COST CALCULATIONS
+// ============================================================
+
+function calculateSurfaceArea() {
+    if (!mesh || !meshData.vertices || !meshData.faces) return 0;
+    
+    const vertices = meshData.vertices;
+    let totalArea = 0;
+    
+    for (const face of meshData.faces) {
+        // Get vertices of the triangle
+        const v0 = new THREE.Vector3(
+            vertices[face[0] * 3],
+            vertices[face[0] * 3 + 1],
+            vertices[face[0] * 3 + 2]
+        );
+        const v1 = new THREE.Vector3(
+            vertices[face[1] * 3],
+            vertices[face[1] * 3 + 1],
+            vertices[face[1] * 3 + 2]
+        );
+        const v2 = new THREE.Vector3(
+            vertices[face[2] * 3],
+            vertices[face[2] * 3 + 1],
+            vertices[face[2] * 3 + 2]
+        );
+        
+        // Calculate triangle area using cross product
+        const edge1 = new THREE.Vector3().subVectors(v1, v0);
+        const edge2 = new THREE.Vector3().subVectors(v2, v0);
+        const cross = new THREE.Vector3().crossVectors(edge1, edge2);
+        totalArea += cross.length() * 0.5;
+    }
+    
+    return totalArea; // in mm²
+}
+
+function updateMaterialCost() {
+    if (!mesh || !mesh.geometry) return;
+    
+    // Get mesh dimensions
+    mesh.geometry.computeBoundingBox();
+    const box = mesh.geometry.boundingBox;
+    const width = box.max.x - box.min.x;   // X in mm
+    const height = box.max.y - box.min.y;  // Y in mm
+    const depth = box.max.z - box.min.z;   // Z in mm
+    
+    // Get shell thickness from slider
+    const shellThickness = parseFloat(document.getElementById('shell-thickness').value);
+    document.getElementById('shell-thickness-value').textContent = shellThickness.toFixed(1);
+    
+    // Get material selection
+    const materialSelect = document.getElementById('material-select');
+    const material = materialSelect.value;
+    
+    // Show/hide custom density input
+    const customDensityGroup = document.getElementById('custom-density-group');
+    if (material === 'custom') {
+        customDensityGroup.style.display = 'block';
+    } else {
+        customDensityGroup.style.display = 'none';
+    }
+    
+    // Get density
+    let density;
+    if (material === 'custom') {
+        density = parseFloat(document.getElementById('custom-density').value);
+        document.getElementById('custom-density-value').textContent = density.toFixed(1);
+    } else {
+        density = MATERIAL_DENSITIES[material];
+    }
+    
+    // Get cost per gram
+    const costPerGram = parseFloat(document.getElementById('cost-per-gram').value);
+    document.getElementById('cost-per-gram-value').textContent = costPerGram.toFixed(2);
+    
+    // Calculate surface area (mm²)
+    const surfaceArea = calculateSurfaceArea();
+    
+    // Calculate shell volume (mm³)
+    // Shell volume ≈ surface area × shell thickness
+    const shellVolume = surfaceArea * shellThickness;
+    
+    // Convert to cm³ (1 cm³ = 1000 mm³)
+    const shellVolumeCm3 = shellVolume / 1000;
+    
+    // Calculate weight (grams)
+    const weight = shellVolumeCm3 * density;
+    
+    // Calculate cost
+    const cost = weight * costPerGram;
+    
+    // Update sidebar display
+    document.getElementById('calc-width').textContent = `${width.toFixed(2)} mm`;
+    document.getElementById('calc-height').textContent = `${height.toFixed(2)} mm`;
+    document.getElementById('calc-depth').textContent = `${depth.toFixed(2)} mm`;
+    document.getElementById('calc-surface-area').textContent = `${surfaceArea.toFixed(2)} mm²`;
+    document.getElementById('calc-shell-volume').textContent = `${shellVolume.toFixed(2)} mm³`;
+    document.getElementById('calc-density').textContent = `${density.toFixed(2)} g/cm³`;
+    document.getElementById('calc-weight').textContent = `${weight.toFixed(3)} g`;
+    document.getElementById('calc-cost').textContent = `$${cost.toFixed(2)}`;
+    
+    // Update canvas panel display
+    updateCanvasMaterialPanel({
+        width, height, depth,
+        surfaceArea, shellThickness, shellVolume,
+        material, density, weight,
+        costPerGram, cost
+    });
+    
+    debugLog(`Material calc: ${material}, ${weight.toFixed(3)}g @ $${costPerGram}/g = $${cost.toFixed(2)}`, 'info');
+}
+
+// Update the on-canvas material info panel
+function updateCanvasMaterialPanel(data) {
+    // Get material display name
+    const materialSelect = document.getElementById('material-select');
+    const materialName = materialSelect.options[materialSelect.selectedIndex].text.split(' (')[0];
+    
+    // Dimensions
+    document.getElementById('canvas-dim-x').textContent = `${data.width.toFixed(2)} mm`;
+    document.getElementById('canvas-dim-y').textContent = `${data.height.toFixed(2)} mm`;
+    document.getElementById('canvas-dim-z').textContent = `${data.depth.toFixed(2)} mm`;
+    
+    // Geometry
+    document.getElementById('canvas-surface-area').textContent = `${data.surfaceArea.toFixed(1)} mm²`;
+    document.getElementById('canvas-shell-thickness').textContent = `${data.shellThickness.toFixed(1)} mm`;
+    document.getElementById('canvas-shell-volume').textContent = `${data.shellVolume.toFixed(1)} mm³`;
+    
+    // Material
+    document.getElementById('canvas-material').textContent = materialName;
+    document.getElementById('canvas-density').textContent = `${data.density.toFixed(2)} g/cm³`;
+    document.getElementById('canvas-weight').textContent = `${data.weight.toFixed(3)} g`;
+    
+    // Cost
+    document.getElementById('canvas-cost-per-gram').textContent = `$${data.costPerGram.toFixed(2)}`;
+    document.getElementById('canvas-total-cost').textContent = `$${data.cost.toFixed(2)}`;
+}
+
+// Toggle material info panel collapse/expand
+function toggleMaterialInfoPanel() {
+    const panel = document.getElementById('material-info-panel');
+    const btn = panel.querySelector('#material-info-header button');
+    
+    panel.classList.toggle('collapsed');
+    btn.textContent = panel.classList.contains('collapsed') ? '□' : '_';
+}
+
+// Update cost per gram when material changes
+function onMaterialChange() {
+    const material = document.getElementById('material-select').value;
+    
+    // Set default cost for the selected material
+    if (material !== 'custom' && MATERIAL_COSTS[material]) {
+        document.getElementById('cost-per-gram').value = MATERIAL_COSTS[material];
+    }
+    
+    updateMaterialCost();
+}
+
+// ============================================================
+// SHELL/SOLIDIFY FUNCTIONS
+// ============================================================
+
+// Calculate vertex normals (average of adjacent face normals)
+function calculateVertexNormals() {
+    if (!meshData.vertices || !meshData.faces) return null;
+    
+    const vertexCount = meshData.vertices.length / 3;
+    const normals = new Float32Array(vertexCount * 3);
+    const counts = new Uint32Array(vertexCount);
+    
+    // Accumulate face normals for each vertex
+    for (const face of meshData.faces) {
+        const v0 = new THREE.Vector3(
+            meshData.vertices[face[0] * 3],
+            meshData.vertices[face[0] * 3 + 1],
+            meshData.vertices[face[0] * 3 + 2]
+        );
+        const v1 = new THREE.Vector3(
+            meshData.vertices[face[1] * 3],
+            meshData.vertices[face[1] * 3 + 1],
+            meshData.vertices[face[1] * 3 + 2]
+        );
+        const v2 = new THREE.Vector3(
+            meshData.vertices[face[2] * 3],
+            meshData.vertices[face[2] * 3 + 1],
+            meshData.vertices[face[2] * 3 + 2]
+        );
+        
+        // Calculate face normal
+        const edge1 = new THREE.Vector3().subVectors(v1, v0);
+        const edge2 = new THREE.Vector3().subVectors(v2, v0);
+        const faceNormal = new THREE.Vector3().crossVectors(edge1, edge2).normalize();
+        
+        // Add to each vertex of this face
+        for (const vi of face) {
+            normals[vi * 3] += faceNormal.x;
+            normals[vi * 3 + 1] += faceNormal.y;
+            normals[vi * 3 + 2] += faceNormal.z;
+            counts[vi]++;
+        }
+    }
+    
+    // Normalize the accumulated normals
+    for (let i = 0; i < vertexCount; i++) {
+        if (counts[i] > 0) {
+            const len = Math.sqrt(
+                normals[i * 3] * normals[i * 3] +
+                normals[i * 3 + 1] * normals[i * 3 + 1] +
+                normals[i * 3 + 2] * normals[i * 3 + 2]
+            );
+            if (len > 0) {
+                normals[i * 3] /= len;
+                normals[i * 3 + 1] /= len;
+                normals[i * 3 + 2] /= len;
+            }
+        }
+    }
+    
+    return normals;
+}
+
+// Update shell preview when thickness changes
+function updateShellPreview() {
+    if (!mesh || !meshData.vertices) return;
+    
+    const shellThickness = parseFloat(document.getElementById('shell-thickness').value);
+    currentShellThickness = shellThickness;
+    
+    // Remove existing shell mesh
+    if (shellMesh) {
+        scene.remove(shellMesh);
+        shellMesh.geometry.dispose();
+        shellMesh.material.dispose();
+        shellMesh = null;
+    }
+    
+    if (!shellEnabled || shellThickness <= 0) return;
+    
+    // Calculate vertex normals if not cached or mesh changed
+    if (!vertexNormalsCache) {
+        vertexNormalsCache = calculateVertexNormals();
+    }
+    
+    if (!vertexNormalsCache) return;
+    
+    // Create inner surface vertices (offset inward by shell thickness)
+    const vertexCount = meshData.vertices.length / 3;
+    const innerVertices = new Float32Array(vertexCount * 3);
+    
+    for (let i = 0; i < vertexCount; i++) {
+        // Offset each vertex inward along its normal
+        innerVertices[i * 3] = meshData.vertices[i * 3] - vertexNormalsCache[i * 3] * shellThickness;
+        innerVertices[i * 3 + 1] = meshData.vertices[i * 3 + 1] - vertexNormalsCache[i * 3 + 1] * shellThickness;
+        innerVertices[i * 3 + 2] = meshData.vertices[i * 3 + 2] - vertexNormalsCache[i * 3 + 2] * shellThickness;
+    }
+    
+    // Create geometry for inner shell
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(innerVertices, 3));
+    
+    // Use same faces but reversed winding order for inner surface
+    const indices = [];
+    for (const face of meshData.faces) {
+        // Reverse winding order so normals point inward
+        indices.push(face[0], face[2], face[1]);
+    }
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+    
+    // Semi-transparent material for inner shell preview
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x4ecdc4, // Cyan color for inner surface
+        metalness: 0.3,
+        roughness: 0.6,
+        side: THREE.BackSide,
+        transparent: true,
+        opacity: 0.4,
+        depthWrite: false
+    });
+    
+    shellMesh = new THREE.Mesh(geometry, material);
+    
+    // Match position with main mesh
+    shellMesh.position.copy(mesh.position);
+    
+    scene.add(shellMesh);
+    
+    debugLog(`Shell preview updated: ${shellThickness.toFixed(2)}mm thickness`, 'info');
+}
+
+// Toggle shell preview visibility
+function toggleShellPreview() {
+    shellEnabled = !shellEnabled;
+    
+    const btn = document.getElementById('shell-preview-btn');
+    if (btn) {
+        btn.textContent = `👁 Shell: ${shellEnabled ? 'ON' : 'OFF'}`;
+        btn.classList.toggle('active', shellEnabled);
+    }
+    
+    if (shellEnabled) {
+        updateShellPreview();
+    } else if (shellMesh) {
+        scene.remove(shellMesh);
+        shellMesh.geometry.dispose();
+        shellMesh.material.dispose();
+        shellMesh = null;
+    }
+    
+    debugLog(`Shell preview: ${shellEnabled ? 'ON' : 'OFF'}`, 'info');
+}
+
+// Clear vertex normals cache (call when mesh is modified)
+function invalidateShellCache() {
+    vertexNormalsCache = null;
+}
+
+// Generate solidified mesh data for export (with inner surface and side walls)
+function generateSolidifiedMesh() {
+    if (!meshData.vertices || !meshData.faces) return null;
+    
+    const shellThickness = currentShellThickness;
+    if (shellThickness <= 0) {
+        // Return original mesh if no shell
+        return {
+            vertices: meshData.vertices,
+            faces: meshData.faces
+        };
+    }
+    
+    // Calculate vertex normals
+    const normals = calculateVertexNormals();
+    if (!normals) return null;
+    
+    const vertexCount = meshData.vertices.length / 3;
+    const faceCount = meshData.faces.length;
+    
+    // Create combined vertices: outer + inner
+    const solidVertices = new Float32Array(vertexCount * 6); // 2x vertices
+    
+    // Copy outer vertices
+    for (let i = 0; i < vertexCount * 3; i++) {
+        solidVertices[i] = meshData.vertices[i];
+    }
+    
+    // Create inner vertices (offset inward)
+    for (let i = 0; i < vertexCount; i++) {
+        solidVertices[vertexCount * 3 + i * 3] = meshData.vertices[i * 3] - normals[i * 3] * shellThickness;
+        solidVertices[vertexCount * 3 + i * 3 + 1] = meshData.vertices[i * 3 + 1] - normals[i * 3 + 1] * shellThickness;
+        solidVertices[vertexCount * 3 + i * 3 + 2] = meshData.vertices[i * 3 + 2] - normals[i * 3 + 2] * shellThickness;
+    }
+    
+    // Create faces: outer faces + inner faces (reversed) + boundary faces
+    const solidFaces = [];
+    
+    // Outer faces (same as original)
+    for (const face of meshData.faces) {
+        solidFaces.push([face[0], face[1], face[2]]);
+    }
+    
+    // Inner faces (reversed winding, offset indices)
+    for (const face of meshData.faces) {
+        solidFaces.push([
+            face[0] + vertexCount,
+            face[2] + vertexCount, // Reversed order
+            face[1] + vertexCount
+        ]);
+    }
+    
+    // Find boundary edges (edges that belong to only one face)
+    const edgeCount = new Map();
+    const edgeFaces = new Map();
+    
+    for (let fi = 0; fi < meshData.faces.length; fi++) {
+        const face = meshData.faces[fi];
+        for (let i = 0; i < 3; i++) {
+            const v1 = face[i];
+            const v2 = face[(i + 1) % 3];
+            const edgeKey = v1 < v2 ? `${v1}-${v2}` : `${v2}-${v1}`;
+            edgeCount.set(edgeKey, (edgeCount.get(edgeKey) || 0) + 1);
+            
+            // Store edge direction info
+            if (!edgeFaces.has(edgeKey)) {
+                edgeFaces.set(edgeKey, []);
+            }
+            edgeFaces.set(edgeKey, [...edgeFaces.get(edgeKey), { v1, v2, face: fi }]);
+        }
+    }
+    
+    // Create side faces for boundary edges (edges with count = 1)
+    for (const [edgeKey, count] of edgeCount) {
+        if (count === 1) {
+            const [v1Str, v2Str] = edgeKey.split('-');
+            const v1 = parseInt(v1Str);
+            const v2 = parseInt(v2Str);
+            
+            // Get the edge direction from the face
+            const edgeInfo = edgeFaces.get(edgeKey)[0];
+            const outerV1 = edgeInfo.v1;
+            const outerV2 = edgeInfo.v2;
+            const innerV1 = outerV1 + vertexCount;
+            const innerV2 = outerV2 + vertexCount;
+            
+            // Create two triangles for the side quad
+            // Winding order depends on edge direction in original face
+            solidFaces.push([outerV1, outerV2, innerV2]);
+            solidFaces.push([outerV1, innerV2, innerV1]);
+        }
+    }
+    
+    debugLog(`Solidified mesh: ${solidVertices.length / 3} vertices, ${solidFaces.length} faces`, 'success');
+    
+    return {
+        vertices: solidVertices,
+        faces: solidFaces
+    };
 }
 
 function duplicateSelection() {
@@ -2451,10 +3155,10 @@ async function exportMesh(format = 'obj') {
     
     showLoading(`Exporting as ${format.toUpperCase()}...`);
     
-    // Convert Float32Array vertices back to array of [x,y,z]
-    const vertices = [];
+    // Export surface mesh (for wax mold casting)
+    const exportVertices = [];
     for (let i = 0; i < meshData.vertices.length; i += 3) {
-        vertices.push([
+        exportVertices.push([
             meshData.vertices[i],
             meshData.vertices[i + 1],
             meshData.vertices[i + 2]
@@ -2466,7 +3170,7 @@ async function exportMesh(format = 'obj') {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                vertices: vertices,
+                vertices: exportVertices,
                 faces: meshData.faces,
                 format: format,
                 filename: 'sculpted_mesh'
@@ -2495,10 +3199,28 @@ async function exportMesh(format = 'obj') {
 // ============================================================
 
 function updateMeshInfo(info) {
-    document.getElementById('info-vertices').textContent = info.vertex_count.toLocaleString();
-    document.getElementById('info-faces').textContent = info.face_count.toLocaleString();
-    document.getElementById('info-dimensions').textContent = 
-        `${info.dimensions.width.toFixed(1)} × ${info.dimensions.height.toFixed(1)} × ${info.dimensions.depth.toFixed(1)}`;
+    if (info) {
+        // Called with server info (on load)
+        document.getElementById('info-vertices').textContent = info.vertex_count.toLocaleString();
+        document.getElementById('info-faces').textContent = info.face_count.toLocaleString();
+        document.getElementById('info-dimensions').textContent = 
+            `${info.dimensions.width.toFixed(1)} × ${info.dimensions.height.toFixed(1)} × ${info.dimensions.depth.toFixed(1)}`;
+    } else if (mesh && mesh.geometry) {
+        // Called without info - calculate from current geometry
+        mesh.geometry.computeBoundingBox();
+        const box = mesh.geometry.boundingBox;
+        const width = box.max.x - box.min.x;
+        const height = box.max.y - box.min.y;
+        const depth = box.max.z - box.min.z;
+        
+        document.getElementById('info-vertices').textContent = (meshData.vertices.length / 3).toLocaleString();
+        document.getElementById('info-faces').textContent = meshData.faces.length.toLocaleString();
+        document.getElementById('info-dimensions').textContent = 
+            `${width.toFixed(1)} × ${height.toFixed(1)} × ${depth.toFixed(1)}`;
+        
+        // Also update dimension lines
+        updateDimensionLines();
+    }
 }
 
 function setStatus(text) {
@@ -2526,6 +3248,11 @@ function animate() {
     // Update normals helper if active
     if (normalsHelper) {
         normalsHelper.update();
+    }
+    
+    // Update dimension label positions as camera moves
+    if (dimensionLabels.length > 0) {
+        updateDimensionLabelPositions();
     }
     
     renderer.render(scene, camera);
