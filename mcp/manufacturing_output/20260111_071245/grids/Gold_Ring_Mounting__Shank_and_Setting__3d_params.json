@@ -1,0 +1,36 @@
+{
+  "input_mesh": "manufacturing_output/20260111_071245/3d_models/Gold_Ring_Mounting__Shank_and_Setting__3d.glb",
+  "square_size": 0.5,
+  "method": "matrix",
+  "mesh_info": {
+    "vertices": 86660,
+    "faces": 272302,
+    "bounds_min": [
+      -0.9992172122001648,
+      -0.9291027784347534,
+      -0.14542919397354126
+    ],
+    "bounds_max": [
+      0.9637189507484436,
+      0.8905072808265686,
+      0.10556913167238235
+    ],
+    "size": [
+      1.9629361629486084,
+      1.819610059261322,
+      0.2509983256459236
+    ],
+    "surface_area": 3.8336775184213745,
+    "volume": null,
+    "is_watertight": false
+  },
+  "grid_params": {},
+  "outputs": {
+    "matrix_skin": "manufacturing_output/20260111_071245/grids\\Gold_Ring_Mounting__Shank_and_Setting__3d_matrix_skin.obj",
+    "wireframe_skin": "manufacturing_output/20260111_071245/grids\\Gold_Ring_Mounting__Shank_and_Setting__3d_wireframe_skin.obj",
+    "quad_skin": "manufacturing_output/20260111_071245/grids\\Gold_Ring_Mounting__Shank_and_Setting__3d_quad_skin.obj",
+    "obj": "manufacturing_output/20260111_071245/grids\\Gold_Ring_Mounting__Shank_and_Setting__3d_grid.obj",
+    "json": "manufacturing_output/20260111_071245/grids\\Gold_Ring_Mounting__Shank_and_Setting__3d_grid_data.json",
+    "gh": "manufacturing_output/20260111_071245/grids\\Gold_Ring_Mounting__Shank_and_Setting__3d_grasshopper.py"
+  }
+}

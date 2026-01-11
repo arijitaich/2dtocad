@@ -863,12 +863,71 @@ def tessellate_mesh(mesh_path: str, output_dir: str, square_size: float = 0.5,
 
 
 # ============================================================================
+# STEP 6: DIMENSION SCALING & COST CALCULATION
+# ============================================================================
+
+def scale_for_manufacturing(mesh_path: str, output_dir: str,
+                           target_width: float = None,
+                           target_height: float = None,
+                           target_depth: float = None,
+                           shell_thickness: float = 0.5,
+                           material: str = "gold",
+                           cost_per_gram: float = None) -> dict:
+    """
+    Scale the matrix skin to exact dimensions and calculate material cost.
+    
+    Args:
+        mesh_path: Path to the matrix skin mesh
+        output_dir: Directory to save scaled mesh
+        target_width: Target width in mm (optional, keeps original if not set)
+        target_height: Target height in mm (optional, scales proportionally)
+        target_depth: Target depth in mm (optional, scales proportionally)
+        shell_thickness: Wall thickness in mm for casting (default: 0.5mm)
+        material: Material type (gold, silver, platinum, brass, resin)
+        cost_per_gram: Cost per gram (uses default for material if not set)
+    
+    Returns:
+        Dict with dimensions, volume, weight, cost, and scaled CAD file path
+    """
+    print(f"\n  📏 Scaling mesh for manufacturing...")
+    
+    try:
+        from mesh_dimension_scaler import scale_and_calculate
+        
+        result = scale_and_calculate(
+            mesh_path=mesh_path,
+            target_width=target_width,
+            target_height=target_height,
+            target_depth=target_depth,
+            shell_thickness=shell_thickness,
+            material=material,
+            cost_per_gram=cost_per_gram,
+            output_dir=output_dir
+        )
+        
+        return result
+        
+    except ImportError:
+        print("    ⚠️ mesh_dimension_scaler not available")
+        return None
+    except Exception as e:
+        print(f"    ✗ Error: {e}")
+        return None
+
+
+# ============================================================================
 # MAIN PIPELINE
 # ============================================================================
 
 def run_pipeline(image_folder: str, output_dir: str = None, 
                  square_size: float = 0.5, num_regions: int = 6,
-                 use_meshy: bool = False):
+                 use_meshy: bool = False,
+                 target_width: float = None,
+                 target_height: float = None,
+                 target_depth: float = None,
+                 shell_thickness: float = 0.5,
+                 material: str = "gold",
+                 cost_per_gram: float = None):
     """
     Run the complete manufacturing pipeline.
     
@@ -878,6 +937,12 @@ def run_pipeline(image_folder: str, output_dir: str = None,
         square_size: Size of grid squares for tessellation
         num_regions: Number of surface regions for CAD grouping
         use_meshy: Use Meshy API instead of Hunyuan3D-2
+        target_width: Target width in mm for final scaled output
+        target_height: Target height in mm (optional)
+        target_depth: Target depth in mm (optional)
+        shell_thickness: Wall thickness in mm for material calculation
+        material: Material type for cost calculation (gold, silver, etc.)
+        cost_per_gram: Material cost per gram (uses default if not set)
     """
     print("\n" + "="*70)
     print("🏭 JEWELRY MANUFACTURING PIPELINE")
