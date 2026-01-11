@@ -417,7 +417,22 @@ class MeshGridTessellator:
         print(f"{'='*60}")
         print(f"  Subdivisions per edge: {subdivisions}")
         print(f"  Surface offset: {offset}")
-        print(f"  Original mesh faces: {len(self.mesh.faces)}")
+        print(f"  Original mesh faces (before welding): {len(self.mesh.faces)}")
+        
+        # CRITICAL: Weld duplicate vertices first!
+        # AI-generated meshes often have duplicate vertices at same positions
+        # This breaks adjacency detection since edges use vertex INDICES
+        print(f"\n  Welding duplicate vertices...")
+        original_verts = len(self.mesh.vertices)
+        
+        # Merge vertices that are at the same position (within tolerance)
+        self.mesh.merge_vertices(merge_tex=True, merge_norm=True)
+        # Also fix up the mesh
+        self.mesh.fix_normals()
+        
+        new_verts = len(self.mesh.vertices)
+        print(f"  Vertices: {original_verts:,} → {new_verts:,} (removed {original_verts - new_verts:,} duplicates)")
+        print(f"  Faces after cleanup: {len(self.mesh.faces):,}")
         
         import sys
         
@@ -515,6 +530,7 @@ class MeshGridTessellator:
         
         all_quads = []
         face_center_base = num_verts + num_midpoints
+        skipped_degenerate = 0
         
         for face_idx, face in enumerate(faces):
             if face_idx % 200000 == 0:
@@ -524,6 +540,11 @@ class MeshGridTessellator:
             v0_idx = face[0]
             v1_idx = face[1]
             v2_idx = face[2]
+            
+            # Skip degenerate triangles (triangles with duplicate vertices)
+            if v0_idx == v1_idx or v1_idx == v2_idx or v2_idx == v0_idx:
+                skipped_degenerate += 1
+                continue
             
             # Get midpoint indices (these are SHARED across adjacent triangles!)
             edge01 = tuple(sorted([v0_idx, v1_idx]))
@@ -558,6 +579,8 @@ class MeshGridTessellator:
         print(f"\n  ✓ CONNECTED Matrix skin created!")
         print(f"    - Total unique vertices: {total_verts:,}")
         print(f"    - Quad faces: {total_quads:,}")
+        if skipped_degenerate > 0:
+            print(f"    - Skipped {skipped_degenerate:,} degenerate triangles")
         print(f"    - Adjacent quads now SHARE edges (truly connected 2D sheet)")
         sys.stdout.flush()
         
@@ -565,7 +588,8 @@ class MeshGridTessellator:
             "vertices": total_verts,
             "faces": total_quads,
             "quad_count": total_quads,
-            "tri_count": 0
+            "tri_count": 0,
+            "num_quads": total_quads  # Add this for compatibility
         }
     
     # ========================================================================
@@ -808,23 +832,179 @@ class MeshGridTessellator:
             "angle_threshold": angle_threshold
         }
     
-    def export_grouped_matrix_skin(self, output_path: str, separate_files: bool = False) -> Dict[str, str]:
+    def group_quads_by_normal_direction(self, num_groups: int = 6) -> Dict:
         """
-        Export matrix skin with groups as separate layers/objects.
+        Group quads by their NORMAL DIRECTION using clustering.
         
-        Each group becomes:
-        - A separate object in the OBJ file (using 'o' or 'g' commands)
-        - Optionally separate files for each group
+        Unlike group_quads_by_angle (which only splits at sharp edges),
+        this method groups ALL quads facing similar directions together,
+        even if they're not adjacent.
+        
+        For a ring, this creates groups like:
+        - Quads facing UP (top of ring)
+        - Quads facing DOWN (bottom)
+        - Quads facing OUTWARD (outer surface)
+        - Quads facing INWARD (inner hole)
+        - Quads facing LEFT/RIGHT (sides)
         
         Args:
-            output_path: Base path for output files
-            separate_files: If True, create one file per group
+            num_groups: Target number of direction groups (default 6 for +/- X,Y,Z)
             
         Returns:
-            Dictionary mapping group_id to file path
+            Dictionary with group info
         """
         print(f"\n{'='*60}")
-        print("EXPORTING GROUPED MATRIX SKIN")
+        print("GROUPING QUADS BY NORMAL DIRECTION (Clustering)")
+        print(f"{'='*60}")
+        print(f"  Target groups: {num_groups}")
+        import sys
+        sys.stdout.flush()
+        
+        if not hasattr(self, 'skin_vertices') or not hasattr(self, 'skin_quads'):
+            print("  ERROR: No matrix skin. Run create_matrix_skin() first.")
+            return None
+        
+        num_quads = len(self.skin_quads)
+        vertices = self.skin_vertices
+        quads = self.skin_quads
+        
+        # Step 1: Calculate normal for each quad
+        print(f"  Step 1: Calculating normals for {num_quads:,} quads...")
+        sys.stdout.flush()
+        
+        quad_normals = []
+        for quad_idx, quad in enumerate(quads):
+            v0 = vertices[quad[0]]
+            v1 = vertices[quad[1]]
+            v2 = vertices[quad[2]]
+            v3 = vertices[quad[3]] if len(quad) > 3 else vertices[quad[2]]
+            
+            diag1 = v2 - v0
+            diag2 = v3 - v1
+            normal = np.cross(diag1, diag2)
+            norm_len = np.linalg.norm(normal)
+            if norm_len > 0:
+                normal = normal / norm_len
+            quad_normals.append(normal)
+        
+        quad_normals = np.array(quad_normals)
+        print(f"    Calculated {len(quad_normals):,} normals")
+        
+        # Step 2: Cluster normals using K-means
+        print(f"  Step 2: Clustering into {num_groups} direction groups...")
+        sys.stdout.flush()
+        
+        if HAS_SKLEARN:
+            from sklearn.cluster import KMeans
+            kmeans = KMeans(n_clusters=num_groups, random_state=42, n_init=10)
+            labels = kmeans.fit_predict(quad_normals)
+            cluster_centers = kmeans.cluster_centers_
+        else:
+            # Fallback: simple axis-based grouping
+            print("    (sklearn not available, using axis-based grouping)")
+            labels = np.zeros(num_quads, dtype=int)
+            # Assign based on dominant axis
+            abs_normals = np.abs(quad_normals)
+            dominant_axis = np.argmax(abs_normals, axis=1)  # 0=X, 1=Y, 2=Z
+            signs = np.sign(quad_normals[np.arange(num_quads), dominant_axis])
+            labels = dominant_axis * 2 + (signs > 0).astype(int)  # 0-5 for +/-X, +/-Y, +/-Z
+            cluster_centers = np.array([
+                [1, 0, 0], [-1, 0, 0],  # +X, -X
+                [0, 1, 0], [0, -1, 0],  # +Y, -Y
+                [0, 0, 1], [0, 0, -1],  # +Z, -Z
+            ])
+        
+        # Step 3: Build groups from labels
+        print(f"  Step 3: Building groups...")
+        sys.stdout.flush()
+        
+        groups = {}
+        for quad_idx, label in enumerate(labels):
+            label = int(label)
+            if label not in groups:
+                groups[label] = []
+            groups[label].append(quad_idx)
+        
+        # Build quad_to_group mapping
+        quad_to_group = {i: int(labels[i]) for i in range(num_quads)}
+        
+        # Calculate group normals and colors
+        group_normals = {}
+        group_colors = {}
+        color_palette = [
+            (255, 100, 100, 255),   # Red (+X)
+            (100, 255, 100, 255),   # Green (-X)
+            (100, 100, 255, 255),   # Blue (+Y)
+            (255, 255, 100, 255),   # Yellow (-Y)
+            (255, 100, 255, 255),   # Magenta (+Z)
+            (100, 255, 255, 255),   # Cyan (-Z)
+            (255, 180, 100, 255),   # Orange
+            (180, 100, 255, 255),   # Purple
+        ]
+        
+        for group_id, quad_list in groups.items():
+            avg_normal = np.mean(quad_normals[quad_list], axis=0)
+            norm_len = np.linalg.norm(avg_normal)
+            if norm_len > 0:
+                avg_normal = avg_normal / norm_len
+            group_normals[group_id] = avg_normal.tolist()
+            group_colors[group_id] = color_palette[group_id % len(color_palette)]
+        
+        # Store results
+        self.quad_groups = groups
+        self.quad_to_group = quad_to_group
+        self.group_normals = group_normals
+        self.group_colors = group_colors
+        self.quad_normals = quad_normals
+        
+        # Print summary
+        print(f"\n  ✓ DIRECTION GROUPING COMPLETE!")
+        print(f"    - Total groups: {len(groups)}")
+        
+        # Name the groups by direction
+        direction_names = {
+            0: "+X (Right)", 1: "-X (Left)",
+            2: "+Y (Up)", 3: "-Y (Down)",
+            4: "+Z (Front)", 5: "-Z (Back)"
+        }
+        
+        print(f"\n    Group breakdown:")
+        sorted_groups = sorted(groups.items(), key=lambda x: len(x[1]), reverse=True)
+        for group_id, quad_list in sorted_groups:
+            pct = 100 * len(quad_list) / num_quads
+            avg_normal = group_normals[group_id]
+            name = direction_names.get(group_id, f"Group {group_id}")
+            print(f"      {name}: {len(quad_list):,} quads ({pct:.1f}%) - Normal: [{avg_normal[0]:.2f}, {avg_normal[1]:.2f}, {avg_normal[2]:.2f}]")
+        
+        sys.stdout.flush()
+        
+        return {
+            "groups": groups,
+            "quad_to_group": quad_to_group,
+            "group_normals": group_normals,
+            "group_colors": group_colors,
+            "num_groups": len(groups)
+        }
+    
+    def export_grouped_matrix_skin(self, output_path: str) -> Dict[str, str]:
+        """
+        Export matrix skin as a SINGLE Rhino .3dm file with groups as LAYERS.
+        
+        Each angular group becomes a separate layer in the Rhino file,
+        allowing CAD designers to:
+        - Toggle visibility of surface regions
+        - Select entire regions by layer
+        - Apply different materials/colors per layer
+        - Edit regions independently
+        
+        Args:
+            output_path: Path for .3dm file (will change extension if needed)
+            
+        Returns:
+            Dictionary with file paths
+        """
+        print(f"\n{'='*60}")
+        print("EXPORTING GROUPED MATRIX SKIN TO RHINO (.3dm)")
         print(f"{'='*60}")
         import sys
         sys.stdout.flush()
@@ -837,88 +1017,160 @@ class MeshGridTessellator:
         quads = self.skin_quads
         groups = self.quad_groups
         group_colors = self.group_colors
+        group_normals = self.group_normals
         
         output_files = {}
         base_name = Path(output_path).stem
         output_dir = Path(output_path).parent
         
-        if separate_files:
-            # Export each group as separate file
-            print(f"  Exporting {len(groups)} separate files...")
+        # Ensure .3dm extension
+        rhino_path = output_dir / f"{base_name}_grouped.3dm"
+        
+        if not HAS_RHINO3DM:
+            print("  WARNING: rhino3dm not installed. Falling back to single OBJ with groups.")
+            print("  Install with: pip install rhino3dm")
+            
+            # Fallback to OBJ with group markers
+            obj_path = output_dir / f"{base_name}_grouped.obj"
+            
+            with open(obj_path, 'w') as f:
+                f.write("# GROUPED MATRIX SKIN\n")
+                f.write(f"# Groups: {len(groups)} (import as separate objects in Rhino)\n")
+                f.write("# Each 'o' command = separate layer when imported\n\n")
+                
+                # Write all vertices
+                for v in vertices:
+                    f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
+                
+                # Write faces by group with object markers
+                for group_id, quad_indices in sorted(groups.items()):
+                    color = group_colors.get(group_id, (128, 128, 128, 255))
+                    normal = group_normals.get(group_id, [0, 0, 1])
+                    f.write(f"\n# Group {group_id}: {len(quad_indices)} quads\n")
+                    f.write(f"# Average normal: [{normal[0]:.2f}, {normal[1]:.2f}, {normal[2]:.2f}]\n")
+                    f.write(f"o Layer_{group_id}\n")
+                    
+                    for qi in quad_indices:
+                        face = quads[qi]
+                        indices = [str(vi + 1) for vi in face]
+                        f.write(f"f {' '.join(indices)}\n")
+            
+            output_files['grouped_obj'] = str(obj_path)
+            print(f"    ✓ Exported OBJ with groups: {obj_path}")
+            print(f"    → Import in Rhino: File > Import, check 'Map OBJ objects to layers'")
+        
+        else:
+            # Create proper Rhino .3dm file with layers
+            print(f"  Creating Rhino file with {len(groups)} layers...")
+            
+            model = rhino3dm.File3dm()
+            
+            # Create parent layer for all groups
+            parent_layer = rhino3dm.Layer()
+            parent_layer.Name = "Matrix_Skin_Groups"
+            parent_layer.Color = (200, 200, 200, 255)
+            parent_layer_idx = model.Layers.Add(parent_layer)
+            parent_layer_id = model.Layers[parent_layer_idx].Id
+            
+            # Create a layer for each group
+            layer_indices = {}
+            
+            # Sort groups by size (largest first) for consistent naming
+            sorted_group_ids = sorted(groups.keys(), key=lambda g: len(groups[g]), reverse=True)
+            
+            # Name groups based on dominant normal direction
+            for rank, group_id in enumerate(sorted_group_ids):
+                normal = group_normals.get(group_id, [0, 0, 1])
+                color = group_colors.get(group_id, (128, 128, 128, 255))
+                quad_count = len(groups[group_id])
+                
+                # Auto-name based on normal direction
+                abs_n = [abs(n) for n in normal]
+                max_axis = abs_n.index(max(abs_n))
+                
+                if max_axis == 2:  # Z dominant
+                    name = "Top" if normal[2] > 0 else "Bottom"
+                elif max_axis == 1:  # Y dominant
+                    name = "Front" if normal[1] > 0 else "Back"
+                else:  # X dominant
+                    name = "Right" if normal[0] > 0 else "Left"
+                
+                layer_name = f"{name}_{group_id}_{quad_count}quads"
+                
+                layer = rhino3dm.Layer()
+                layer.Name = layer_name
+                layer.Color = color
+                layer.ParentLayerId = parent_layer_id
+                layer_idx = model.Layers.Add(layer)
+                layer_indices[group_id] = layer_idx
+                
+                print(f"    Layer: {layer_name} - {quad_count:,} quads")
+            
+            # Add mesh geometry to each layer
+            print(f"\n  Adding mesh geometry to layers...")
+            sys.stdout.flush()
             
             for group_id, quad_indices in groups.items():
-                group_file = output_dir / f"{base_name}_group_{group_id}.obj"
+                if not quad_indices:
+                    continue
                 
-                # Collect vertices used by this group
+                # Create a mesh for this group
+                group_mesh = rhino3dm.Mesh()
+                
+                # Collect vertices used by this group and create remapping
                 used_vertices = set()
                 for qi in quad_indices:
                     for vi in quads[qi]:
                         used_vertices.add(vi)
                 
-                # Create vertex remapping
-                old_to_new = {old: new for new, old in enumerate(sorted(used_vertices))}
+                # Add vertices with remapping
+                old_to_new = {}
+                for new_idx, old_idx in enumerate(sorted(used_vertices)):
+                    v = vertices[old_idx]
+                    group_mesh.Vertices.Add(float(v[0]), float(v[1]), float(v[2]))
+                    old_to_new[old_idx] = new_idx
                 
-                with open(group_file, 'w') as f:
-                    f.write(f"# Matrix Skin Group {group_id}\n")
-                    f.write(f"# Quads: {len(quad_indices)}\n")
-                    f.write(f"# Angle-based grouping\n\n")
+                # Add faces (quads as two triangles or as quads if supported)
+                for qi in quad_indices:
+                    face = quads[qi]
+                    remapped = [old_to_new[vi] for vi in face]
                     
-                    # Write vertices
-                    for old_vi in sorted(used_vertices):
-                        v = vertices[old_vi]
-                        f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
-                    
-                    # Write faces with remapped indices
-                    f.write(f"\ng group_{group_id}\n")
-                    for qi in quad_indices:
-                        face = quads[qi]
-                        indices = [str(old_to_new[vi] + 1) for vi in face]  # OBJ is 1-indexed
-                        f.write(f"f {' '.join(indices)}\n")
+                    if len(remapped) == 4:
+                        # Add as quad
+                        group_mesh.Faces.AddFace(remapped[0], remapped[1], remapped[2], remapped[3])
+                    elif len(remapped) == 3:
+                        # Add as triangle
+                        group_mesh.Faces.AddFace(remapped[0], remapped[1], remapped[2])
                 
-                output_files[group_id] = str(group_file)
-                print(f"    Group {group_id}: {len(quad_indices)} quads → {group_file.name}")
-        
-        else:
-            # Export all groups in single file with group tags
-            print(f"  Exporting single file with {len(groups)} groups...")
+                # Compute normals
+                group_mesh.Normals.ComputeNormals()
+                
+                # Add to model with layer assignment
+                attr = rhino3dm.ObjectAttributes()
+                attr.LayerIndex = layer_indices[group_id]
+                attr.Name = f"Group_{group_id}"
+                
+                model.Objects.AddMesh(group_mesh, attr)
             
-            with open(output_path, 'w') as f:
-                f.write("# GROUPED MATRIX SKIN\n")
-                f.write(f"# Groups: {len(groups)}\n")
-                f.write("# Each group = surface region based on angular continuity\n")
-                f.write(f"# Angle threshold: {getattr(self, 'angle_threshold', 180)}°\n\n")
-                
-                # Write all vertices
-                print(f"    Writing {len(vertices):,} vertices...")
-                for v in vertices:
-                    f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
-                
-                # Write faces grouped
-                print(f"    Writing faces by group...")
-                for group_id, quad_indices in sorted(groups.items()):
-                    color = group_colors.get(group_id, (128, 128, 128, 255))
-                    f.write(f"\n# Group {group_id}: {len(quad_indices)} quads\n")
-                    f.write(f"# Color: RGB({color[0]}, {color[1]}, {color[2]})\n")
-                    f.write(f"o group_{group_id}\n")
-                    
-                    for qi in quad_indices:
-                        face = quads[qi]
-                        indices = [str(vi + 1) for vi in face]  # OBJ is 1-indexed
-                        f.write(f"f {' '.join(indices)}\n")
+            # Save the file
+            model.Write(str(rhino_path), version=7)
             
-            output_files['combined'] = output_path
-            print(f"    ✓ Exported to: {output_path}")
+            output_files['grouped_3dm'] = str(rhino_path)
+            print(f"\n    ✓ Exported Rhino file: {rhino_path}")
+            print(f"    → Open in Rhino 7/8 to see layers panel")
         
         # Also export group metadata as JSON
         metadata_path = output_dir / f"{base_name}_groups.json"
         metadata = {
             "total_groups": len(groups),
             "angle_threshold": getattr(self, 'angle_threshold', 180),
+            "rhino_file": str(rhino_path) if HAS_RHINO3DM else None,
             "groups": {
                 str(gid): {
                     "quad_count": len(qlist),
-                    "average_normal": self.group_normals.get(gid, [0, 0, 1]),
-                    "color_rgba": list(group_colors.get(gid, (128, 128, 128, 255)))
+                    "average_normal": group_normals.get(gid, [0, 0, 1]),
+                    "color_rgba": list(group_colors.get(gid, (128, 128, 128, 255))),
+                    "layer_name": f"Group_{gid}"
                 }
                 for gid, qlist in groups.items()
             }
@@ -2284,8 +2536,7 @@ def process_mesh(mesh_path: str, output_dir: str,
                  num_regions: int = 6,
                  export_formats: List[str] = None,
                  shell_thickness: float = 0.5,
-                 subdivisions: int = 2,
-                 angle_threshold: float = 180.0) -> Dict[str, str]:
+                 subdivisions: int = 2) -> Dict[str, str]:
     """
     Process a mesh and export tessellated grid in multiple formats.
     
@@ -2298,7 +2549,6 @@ def process_mesh(mesh_path: str, output_dir: str,
         export_formats: List of formats to export ('3dm', 'obj', 'json', 'gh')
         shell_thickness: Thickness of Matrix skin shell (default 0.5)
         subdivisions: Number of subdivisions per triangle for Matrix skin (default 2)
-        angle_threshold: Max angle (degrees) between adjacent quads to be in same group (default 180)
         
     Returns:
         Dictionary of exported file paths
@@ -2367,31 +2617,9 @@ def process_mesh(mesh_path: str, output_dir: str,
         raw_skin_path = os.path.join(output_dir, f"{base_name}_quad_skin.obj")
         outputs['quad_skin'] = tessellator.export_connected_to_obj(raw_skin_path)
         
-        # NEW: Angular grouping - group quads by surface continuity
         print(f"\n✓ Matrix skin exported: {outputs.get('matrix_skin', 'N/A')}")
         print(f"✓ Wireframe skin exported: {outputs.get('wireframe_skin', 'N/A')}")
         print(f"✓ Raw quad skin exported: {outputs.get('quad_skin', 'N/A')}")
-        
-        # STEP 6: Group quads by angular continuity
-        grouping_result = tessellator.group_quads_by_angle(angle_threshold=angle_threshold)
-        
-        if grouping_result:
-            # Export grouped version
-            grouped_path = os.path.join(output_dir, f"{base_name}_grouped.obj")
-            group_outputs = tessellator.export_grouped_matrix_skin(grouped_path, separate_files=False)
-            outputs['grouped_skin'] = grouped_path
-            outputs['group_metadata'] = group_outputs.get('metadata')
-            
-            # Also export separate files per group for easy layer import
-            separate_dir = os.path.join(output_dir, "groups")
-            os.makedirs(separate_dir, exist_ok=True)
-            separate_path = os.path.join(separate_dir, f"{base_name}_grouped.obj")
-            separate_outputs = tessellator.export_grouped_matrix_skin(separate_path, separate_files=True)
-            outputs['group_files'] = separate_outputs
-            
-            print(f"\n✓ Angular grouping complete: {grouping_result['num_groups']} groups")
-            print(f"✓ Grouped skin: {grouped_path}")
-            print(f"✓ Separate group files: {separate_dir}/")
     
     elif '3dm' in export_formats:
         path = os.path.join(output_dir, f"{base_name}_grid.3dm")

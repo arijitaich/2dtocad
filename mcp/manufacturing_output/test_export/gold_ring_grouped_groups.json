@@ -1,0 +1,412 @@
+{
+  "total_groups": 27,
+  "angle_threshold": 180,
+  "rhino_file": null,
+  "groups": {
+    "0": {
+      "quad_count": 520119,
+      "average_normal": [
+        0.01762667102680432,
+        -0.9987270814072157,
+        0.047260102965795484
+      ],
+      "color_rgba": [
+        255,
+        100,
+        100,
+        255
+      ],
+      "layer_name": "Group_0"
+    },
+    "1": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        255,
+        100,
+        255
+      ],
+      "layer_name": "Group_1"
+    },
+    "2": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_2"
+    },
+    "3": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        255,
+        100,
+        255
+      ],
+      "layer_name": "Group_3"
+    },
+    "4": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_4"
+    },
+    "5": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        255,
+        255,
+        255
+      ],
+      "layer_name": "Group_5"
+    },
+    "6": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        180,
+        100,
+        255
+      ],
+      "layer_name": "Group_6"
+    },
+    "7": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        180,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_7"
+    },
+    "8": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        180,
+        100,
+        255
+      ],
+      "layer_name": "Group_8"
+    },
+    "9": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        180,
+        180,
+        255,
+        255
+      ],
+      "layer_name": "Group_9"
+    },
+    "10": {
+      "quad_count": 6,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        180,
+        180,
+        255
+      ],
+      "layer_name": "Group_10"
+    },
+    "11": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        180,
+        255,
+        180,
+        255
+      ],
+      "layer_name": "Group_11"
+    },
+    "12": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        100,
+        100,
+        255
+      ],
+      "layer_name": "Group_12"
+    },
+    "13": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        255,
+        100,
+        255
+      ],
+      "layer_name": "Group_13"
+    },
+    "14": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_14"
+    },
+    "15": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        255,
+        100,
+        255
+      ],
+      "layer_name": "Group_15"
+    },
+    "16": {
+      "quad_count": 9,
+      "average_normal": [
+        0.0027955940128702203,
+        0.0026780072335711295,
+        0.9999925064376093
+      ],
+      "color_rgba": [
+        255,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_16"
+    },
+    "17": {
+      "quad_count": 3,
+      "average_normal": [
+        -0.007016463274860628,
+        -0.0074608484064992335,
+        -0.9999475511166412
+      ],
+      "color_rgba": [
+        100,
+        255,
+        255,
+        255
+      ],
+      "layer_name": "Group_17"
+    },
+    "18": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        180,
+        100,
+        255
+      ],
+      "layer_name": "Group_18"
+    },
+    "19": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        180,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_19"
+    },
+    "20": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        180,
+        100,
+        255
+      ],
+      "layer_name": "Group_20"
+    },
+    "21": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        180,
+        180,
+        255,
+        255
+      ],
+      "layer_name": "Group_21"
+    },
+    "22": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        180,
+        180,
+        255
+      ],
+      "layer_name": "Group_22"
+    },
+    "23": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        180,
+        255,
+        180,
+        255
+      ],
+      "layer_name": "Group_23"
+    },
+    "24": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        255,
+        100,
+        100,
+        255
+      ],
+      "layer_name": "Group_24"
+    },
+    "25": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        255,
+        100,
+        255
+      ],
+      "layer_name": "Group_25"
+    },
+    "26": {
+      "quad_count": 3,
+      "average_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "color_rgba": [
+        100,
+        100,
+        255,
+        255
+      ],
+      "layer_name": "Group_26"
+    }
+  }
+}

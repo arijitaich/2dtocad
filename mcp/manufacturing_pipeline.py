@@ -792,8 +792,7 @@ def wait_for_meshy_tasks(tasks: list, output_dir: str, max_wait: int = 30) -> li
 
 def tessellate_mesh(mesh_path: str, output_dir: str, square_size: float = 0.5, 
                     num_regions: int = 6, method: str = "matrix",
-                    shell_thickness: float = 0.5, subdivisions: int = 2,
-                    angle_threshold: float = 180.0) -> dict:
+                    shell_thickness: float = 0.5, subdivisions: int = 2) -> dict:
     """
     Wrap 3D mesh with parametric grid skin.
     
@@ -804,20 +803,12 @@ def tessellate_mesh(mesh_path: str, output_dir: str, square_size: float = 0.5,
     
     Matrix skin creates:
     - Complete surface coverage (every part of the 3D model is wrapped)
-    - Connected quad faces (not individual disconnected squares)
+    - Connected quad faces (all squares share edges with neighbors)
     - Hollow shell export (inner + outer skin with thickness)
     - Wireframe version (edges as tubes)
-    - Angular grouping (quads grouped by surface continuity)
-    
-    Angular Grouping (angle_threshold):
-    - Groups adjacent quads if their normals are within angle_threshold degrees
-    - 180° = only split at complete folds (front vs back of surface)
-    - 90° = split at perpendicular surfaces
-    - Creates separate layers for each surface region
     
     This allows CAD designers to:
-    - See the entire 3D shape as an editable mesh
-    - Work with logically grouped surface regions
+    - See the entire 3D shape as an editable mesh of connected squares
     - Remove the solid and keep just the skin/shell
     - Edit for mold manufacturing
     """
@@ -827,9 +818,7 @@ def tessellate_mesh(mesh_path: str, output_dir: str, square_size: float = 0.5,
     if method == "matrix":
         print(f"     Shell thickness: {shell_thickness}")
         print(f"     Subdivisions: {subdivisions}")
-        print(f"     Angle threshold for grouping: {angle_threshold}°")
-        print("     → Creating COMPLETE quad skin wrapping ENTIRE surface")
-        print("     → Grouping quads by angular continuity into layers")
+        print("     → Creating COMPLETE connected quad skin wrapping ENTIRE surface")
     else:
         print(f"     Square size: {square_size}")
         print(f"     Method: connected (shared vertices, region grouping)")
@@ -845,20 +834,19 @@ def tessellate_mesh(mesh_path: str, output_dir: str, square_size: float = 0.5,
             num_regions=num_regions,
             export_formats=['3dm', 'obj', 'json', 'gh'],
             shell_thickness=shell_thickness,
-            subdivisions=subdivisions,
-            angle_threshold=angle_threshold
+            subdivisions=subdivisions
         )
         
         if method == "matrix":
-            print(f"    ✓ MATRIX SKIN created - entire surface wrapped!")
+            print(f"    ✓ MATRIX SKIN created - entire surface wrapped with connected squares!")
             print(f"    ✓ Shell thickness: {shell_thickness}")
             if outputs:
                 if 'matrix_skin' in outputs:
                     print(f"    → Matrix shell: {outputs['matrix_skin']}")
                 if 'wireframe_skin' in outputs:
                     print(f"    → Wireframe: {outputs['wireframe_skin']}")
-                if 'grouped_skin' in outputs:
-                    print(f"    → Grouped layers: {outputs['grouped_skin']}")
+                if 'quad_skin' in outputs:
+                    print(f"    → Quad skin: {outputs['quad_skin']}")
         else:
             print(f"    ✓ Connected grid created with {square_size} unit squares")
             print(f"    ✓ Surface divided into {num_regions} editable regions")
