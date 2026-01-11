@@ -568,6 +568,371 @@ class MeshGridTessellator:
             "tri_count": 0
         }
     
+    # ========================================================================
+    # ANGULAR GROUPING: Group quads by surface continuity (180° threshold)
+    # ========================================================================
+    
+    def group_quads_by_angle(self, angle_threshold: float = 180.0) -> Dict:
+        """
+        Group matrix skin quads based on angular relationship with neighbors.
+        
+        ALGORITHM:
+        1. Calculate normal vector for each quad
+        2. Build adjacency graph (quads sharing edges)
+        3. Flood-fill grouping: 
+           - Start with ungrouped quad
+           - Add neighbors if angle between normals < threshold
+           - When neighbor exceeds threshold, it starts a new group
+        4. Repeat until all quads are grouped
+        
+        The 180° threshold means: if two adjacent quads face opposite directions
+        (like front vs back of object), they belong to different groups.
+        
+        Args:
+            angle_threshold: Maximum angle (degrees) between adjacent quad normals
+                            to be in same group. 180 = only split at sharp folds
+                            90 = split at perpendicular surfaces
+                            
+        Returns:
+            Dictionary with group info:
+            {
+                "groups": {group_id: [quad_indices]},
+                "quad_to_group": {quad_idx: group_id},
+                "group_normals": {group_id: average_normal},
+                "group_colors": {group_id: (r,g,b,a)}
+            }
+        """
+        print(f"\n{'='*60}")
+        print("GROUPING QUADS BY ANGULAR CONTINUITY")
+        print(f"{'='*60}")
+        print(f"  Angle threshold: {angle_threshold}°")
+        print(f"  (Neighbors within {angle_threshold}° stay in same group)")
+        import sys
+        sys.stdout.flush()
+        
+        if not hasattr(self, 'skin_vertices') or not hasattr(self, 'skin_quads'):
+            print("  ERROR: No matrix skin. Run create_matrix_skin() first.")
+            return None
+        
+        num_quads = len(self.skin_quads)
+        vertices = self.skin_vertices
+        quads = self.skin_quads
+        
+        # Step 1: Calculate normal for each quad
+        print(f"  Step 1: Calculating normals for {num_quads:,} quads...")
+        sys.stdout.flush()
+        
+        quad_normals = []
+        quad_centers = []
+        
+        for quad_idx, quad in enumerate(quads):
+            if quad_idx % 100000 == 0 and quad_idx > 0:
+                print(f"    Processing {quad_idx:,}/{num_quads:,}")
+                sys.stdout.flush()
+            
+            # Get quad vertices
+            v0 = vertices[quad[0]]
+            v1 = vertices[quad[1]]
+            v2 = vertices[quad[2]]
+            v3 = vertices[quad[3]] if len(quad) > 3 else vertices[quad[2]]
+            
+            # Calculate center
+            center = (v0 + v1 + v2 + v3) / 4
+            quad_centers.append(center)
+            
+            # Calculate normal using cross product of diagonals
+            diag1 = v2 - v0
+            diag2 = v3 - v1
+            normal = np.cross(diag1, diag2)
+            norm_length = np.linalg.norm(normal)
+            if norm_length > 1e-10:
+                normal = normal / norm_length
+            else:
+                normal = np.array([0, 0, 1])
+            
+            quad_normals.append(normal)
+        
+        quad_normals = np.array(quad_normals)
+        quad_centers = np.array(quad_centers)
+        
+        # Step 2: Build adjacency graph (quads sharing edges)
+        print(f"  Step 2: Building adjacency graph...")
+        sys.stdout.flush()
+        
+        # Create edge -> quads mapping
+        edge_to_quads = defaultdict(list)
+        
+        for quad_idx, quad in enumerate(quads):
+            if quad_idx % 100000 == 0 and quad_idx > 0:
+                print(f"    Processing {quad_idx:,}/{num_quads:,}")
+                sys.stdout.flush()
+            
+            num_verts = len(quad)
+            for i in range(num_verts):
+                j = (i + 1) % num_verts
+                edge = tuple(sorted([quad[i], quad[j]]))
+                edge_to_quads[edge].append(quad_idx)
+        
+        # Build adjacency list
+        quad_neighbors = defaultdict(set)
+        for edge, quad_list in edge_to_quads.items():
+            if len(quad_list) == 2:
+                q1, q2 = quad_list
+                quad_neighbors[q1].add(q2)
+                quad_neighbors[q2].add(q1)
+        
+        avg_neighbors = sum(len(n) for n in quad_neighbors.values()) / num_quads if num_quads > 0 else 0
+        print(f"    Average neighbors per quad: {avg_neighbors:.1f}")
+        
+        # Step 3: Flood-fill grouping based on angle threshold
+        print(f"  Step 3: Flood-fill grouping (threshold={angle_threshold}°)...")
+        sys.stdout.flush()
+        
+        # Convert angle to cosine threshold (cos(180°) = -1, cos(90°) = 0, cos(0°) = 1)
+        angle_rad = np.radians(angle_threshold)
+        cos_threshold = np.cos(angle_rad)
+        
+        groups = {}  # group_id -> list of quad indices
+        quad_to_group = {}  # quad_idx -> group_id
+        ungrouped = set(range(num_quads))
+        current_group = 0
+        
+        while ungrouped:
+            # Start new group with an ungrouped quad
+            seed_quad = next(iter(ungrouped))
+            groups[current_group] = []
+            
+            # BFS flood fill
+            queue = [seed_quad]
+            
+            while queue:
+                quad_idx = queue.pop(0)
+                
+                if quad_idx not in ungrouped:
+                    continue
+                
+                # Add to current group
+                groups[current_group].append(quad_idx)
+                quad_to_group[quad_idx] = current_group
+                ungrouped.remove(quad_idx)
+                
+                # Check neighbors
+                for neighbor_idx in quad_neighbors[quad_idx]:
+                    if neighbor_idx not in ungrouped:
+                        continue
+                    
+                    # Calculate angle between normals
+                    n1 = quad_normals[quad_idx]
+                    n2 = quad_normals[neighbor_idx]
+                    dot_product = np.dot(n1, n2)
+                    
+                    # Clamp to [-1, 1] for numerical stability
+                    dot_product = np.clip(dot_product, -1.0, 1.0)
+                    
+                    # If angle is within threshold, add to same group
+                    # dot > cos_threshold means angle < threshold
+                    if dot_product >= cos_threshold:
+                        queue.append(neighbor_idx)
+            
+            current_group += 1
+            
+            if current_group % 10 == 0:
+                print(f"    Groups created: {current_group}, Remaining: {len(ungrouped):,}")
+                sys.stdout.flush()
+        
+        # Step 4: Calculate group statistics
+        print(f"\n  Step 4: Calculating group statistics...")
+        sys.stdout.flush()
+        
+        group_normals = {}
+        group_colors = {}
+        
+        # Generate distinct colors for groups
+        color_palette = [
+            (255, 100, 100, 255),   # Red
+            (100, 255, 100, 255),   # Green
+            (100, 100, 255, 255),   # Blue
+            (255, 255, 100, 255),   # Yellow
+            (255, 100, 255, 255),   # Magenta
+            (100, 255, 255, 255),   # Cyan
+            (255, 180, 100, 255),   # Orange
+            (180, 100, 255, 255),   # Purple
+            (100, 180, 100, 255),   # Dark Green
+            (180, 180, 255, 255),   # Light Blue
+            (255, 180, 180, 255),   # Pink
+            (180, 255, 180, 255),   # Light Green
+        ]
+        
+        for group_id, quad_list in groups.items():
+            # Average normal for group
+            group_normal = np.mean(quad_normals[quad_list], axis=0)
+            norm_len = np.linalg.norm(group_normal)
+            if norm_len > 0:
+                group_normal = group_normal / norm_len
+            group_normals[group_id] = group_normal.tolist()
+            
+            # Assign color
+            group_colors[group_id] = color_palette[group_id % len(color_palette)]
+        
+        # Store results
+        self.quad_groups = groups
+        self.quad_to_group = quad_to_group
+        self.group_normals = group_normals
+        self.group_colors = group_colors
+        self.quad_normals = quad_normals
+        self.quad_centers = quad_centers
+        
+        # Print summary
+        print(f"\n  ✓ ANGULAR GROUPING COMPLETE!")
+        print(f"    - Total groups created: {len(groups)}")
+        print(f"    - Angle threshold: {angle_threshold}°")
+        print(f"\n    Group breakdown:")
+        
+        sorted_groups = sorted(groups.items(), key=lambda x: len(x[1]), reverse=True)
+        for group_id, quad_list in sorted_groups[:10]:  # Show top 10
+            pct = 100 * len(quad_list) / num_quads
+            avg_normal = group_normals[group_id]
+            print(f"      Group {group_id}: {len(quad_list):,} quads ({pct:.1f}%) - Normal: [{avg_normal[0]:.2f}, {avg_normal[1]:.2f}, {avg_normal[2]:.2f}]")
+        
+        if len(groups) > 10:
+            print(f"      ... and {len(groups) - 10} more groups")
+        
+        sys.stdout.flush()
+        
+        return {
+            "groups": groups,
+            "quad_to_group": quad_to_group,
+            "group_normals": group_normals,
+            "group_colors": group_colors,
+            "num_groups": len(groups),
+            "angle_threshold": angle_threshold
+        }
+    
+    def export_grouped_matrix_skin(self, output_path: str, separate_files: bool = False) -> Dict[str, str]:
+        """
+        Export matrix skin with groups as separate layers/objects.
+        
+        Each group becomes:
+        - A separate object in the OBJ file (using 'o' or 'g' commands)
+        - Optionally separate files for each group
+        
+        Args:
+            output_path: Base path for output files
+            separate_files: If True, create one file per group
+            
+        Returns:
+            Dictionary mapping group_id to file path
+        """
+        print(f"\n{'='*60}")
+        print("EXPORTING GROUPED MATRIX SKIN")
+        print(f"{'='*60}")
+        import sys
+        sys.stdout.flush()
+        
+        if not hasattr(self, 'quad_groups'):
+            print("  ERROR: No groups created. Run group_quads_by_angle() first.")
+            return None
+        
+        vertices = self.skin_vertices
+        quads = self.skin_quads
+        groups = self.quad_groups
+        group_colors = self.group_colors
+        
+        output_files = {}
+        base_name = Path(output_path).stem
+        output_dir = Path(output_path).parent
+        
+        if separate_files:
+            # Export each group as separate file
+            print(f"  Exporting {len(groups)} separate files...")
+            
+            for group_id, quad_indices in groups.items():
+                group_file = output_dir / f"{base_name}_group_{group_id}.obj"
+                
+                # Collect vertices used by this group
+                used_vertices = set()
+                for qi in quad_indices:
+                    for vi in quads[qi]:
+                        used_vertices.add(vi)
+                
+                # Create vertex remapping
+                old_to_new = {old: new for new, old in enumerate(sorted(used_vertices))}
+                
+                with open(group_file, 'w') as f:
+                    f.write(f"# Matrix Skin Group {group_id}\n")
+                    f.write(f"# Quads: {len(quad_indices)}\n")
+                    f.write(f"# Angle-based grouping\n\n")
+                    
+                    # Write vertices
+                    for old_vi in sorted(used_vertices):
+                        v = vertices[old_vi]
+                        f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
+                    
+                    # Write faces with remapped indices
+                    f.write(f"\ng group_{group_id}\n")
+                    for qi in quad_indices:
+                        face = quads[qi]
+                        indices = [str(old_to_new[vi] + 1) for vi in face]  # OBJ is 1-indexed
+                        f.write(f"f {' '.join(indices)}\n")
+                
+                output_files[group_id] = str(group_file)
+                print(f"    Group {group_id}: {len(quad_indices)} quads → {group_file.name}")
+        
+        else:
+            # Export all groups in single file with group tags
+            print(f"  Exporting single file with {len(groups)} groups...")
+            
+            with open(output_path, 'w') as f:
+                f.write("# GROUPED MATRIX SKIN\n")
+                f.write(f"# Groups: {len(groups)}\n")
+                f.write("# Each group = surface region based on angular continuity\n")
+                f.write(f"# Angle threshold: {getattr(self, 'angle_threshold', 180)}°\n\n")
+                
+                # Write all vertices
+                print(f"    Writing {len(vertices):,} vertices...")
+                for v in vertices:
+                    f.write(f"v {v[0]:.6f} {v[1]:.6f} {v[2]:.6f}\n")
+                
+                # Write faces grouped
+                print(f"    Writing faces by group...")
+                for group_id, quad_indices in sorted(groups.items()):
+                    color = group_colors.get(group_id, (128, 128, 128, 255))
+                    f.write(f"\n# Group {group_id}: {len(quad_indices)} quads\n")
+                    f.write(f"# Color: RGB({color[0]}, {color[1]}, {color[2]})\n")
+                    f.write(f"o group_{group_id}\n")
+                    
+                    for qi in quad_indices:
+                        face = quads[qi]
+                        indices = [str(vi + 1) for vi in face]  # OBJ is 1-indexed
+                        f.write(f"f {' '.join(indices)}\n")
+            
+            output_files['combined'] = output_path
+            print(f"    ✓ Exported to: {output_path}")
+        
+        # Also export group metadata as JSON
+        metadata_path = output_dir / f"{base_name}_groups.json"
+        metadata = {
+            "total_groups": len(groups),
+            "angle_threshold": getattr(self, 'angle_threshold', 180),
+            "groups": {
+                str(gid): {
+                    "quad_count": len(qlist),
+                    "average_normal": self.group_normals.get(gid, [0, 0, 1]),
+                    "color_rgba": list(group_colors.get(gid, (128, 128, 128, 255)))
+                }
+                for gid, qlist in groups.items()
+            }
+        }
+        
+        with open(metadata_path, 'w') as f:
+            json.dump(metadata, f, indent=2)
+        
+        output_files['metadata'] = str(metadata_path)
+        print(f"    ✓ Metadata: {metadata_path}")
+        
+        sys.stdout.flush()
+        return output_files
+
     def export_matrix_skin(self, output_path: str, shell_thickness: float = 0.01) -> str:
         """
         Export the Matrix skin as a CONNECTED 2D SHEET of quads.
@@ -1919,7 +2284,8 @@ def process_mesh(mesh_path: str, output_dir: str,
                  num_regions: int = 6,
                  export_formats: List[str] = None,
                  shell_thickness: float = 0.5,
-                 subdivisions: int = 2) -> Dict[str, str]:
+                 subdivisions: int = 2,
+                 angle_threshold: float = 180.0) -> Dict[str, str]:
     """
     Process a mesh and export tessellated grid in multiple formats.
     
@@ -1932,6 +2298,7 @@ def process_mesh(mesh_path: str, output_dir: str,
         export_formats: List of formats to export ('3dm', 'obj', 'json', 'gh')
         shell_thickness: Thickness of Matrix skin shell (default 0.5)
         subdivisions: Number of subdivisions per triangle for Matrix skin (default 2)
+        angle_threshold: Max angle (degrees) between adjacent quads to be in same group (default 180)
         
     Returns:
         Dictionary of exported file paths
@@ -2000,9 +2367,31 @@ def process_mesh(mesh_path: str, output_dir: str,
         raw_skin_path = os.path.join(output_dir, f"{base_name}_quad_skin.obj")
         outputs['quad_skin'] = tessellator.export_connected_to_obj(raw_skin_path)
         
+        # NEW: Angular grouping - group quads by surface continuity
         print(f"\n✓ Matrix skin exported: {outputs.get('matrix_skin', 'N/A')}")
         print(f"✓ Wireframe skin exported: {outputs.get('wireframe_skin', 'N/A')}")
         print(f"✓ Raw quad skin exported: {outputs.get('quad_skin', 'N/A')}")
+        
+        # STEP 6: Group quads by angular continuity
+        grouping_result = tessellator.group_quads_by_angle(angle_threshold=angle_threshold)
+        
+        if grouping_result:
+            # Export grouped version
+            grouped_path = os.path.join(output_dir, f"{base_name}_grouped.obj")
+            group_outputs = tessellator.export_grouped_matrix_skin(grouped_path, separate_files=False)
+            outputs['grouped_skin'] = grouped_path
+            outputs['group_metadata'] = group_outputs.get('metadata')
+            
+            # Also export separate files per group for easy layer import
+            separate_dir = os.path.join(output_dir, "groups")
+            os.makedirs(separate_dir, exist_ok=True)
+            separate_path = os.path.join(separate_dir, f"{base_name}_grouped.obj")
+            separate_outputs = tessellator.export_grouped_matrix_skin(separate_path, separate_files=True)
+            outputs['group_files'] = separate_outputs
+            
+            print(f"\n✓ Angular grouping complete: {grouping_result['num_groups']} groups")
+            print(f"✓ Grouped skin: {grouped_path}")
+            print(f"✓ Separate group files: {separate_dir}/")
     
     elif '3dm' in export_formats:
         path = os.path.join(output_dir, f"{base_name}_grid.3dm")
