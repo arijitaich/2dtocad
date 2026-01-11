@@ -1,0 +1,45 @@
+{
+  "best_image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+  "best_score": 96,
+  "all_evaluations": [
+    {
+      "object_clarity": 25,
+      "background_simplicity": 25,
+      "lighting_quality": 18,
+      "view_angle": 13,
+      "object_isolation": 15,
+      "total_score": 96,
+      "issues": [],
+      "recommendation": "Excellent image for 3D reconstruction. Clear object, simple background, and good lighting allow for effective depth perception and isolation.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+      "filename": "Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png"
+    },
+    {
+      "object_clarity": 24,
+      "background_simplicity": 20,
+      "lighting_quality": 17,
+      "view_angle": 14,
+      "object_isolation": 14,
+      "total_score": 89,
+      "issues": [],
+      "recommendation": "This image is suitable for image-to-3D conversion. The object is clear, well-lit, and well-isolated. The background is simple enough.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png",
+      "filename": "Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png"
+    },
+    {
+      "object_clarity": 22,
+      "background_simplicity": 24,
+      "lighting_quality": 17,
+      "view_angle": 10,
+      "object_isolation": 14,
+      "total_score": 87,
+      "issues": [
+        "The view angle is almost directly front-on, which doesn't give a lot of depth information."
+      ],
+      "recommendation": "The image is good, but a slightly different angle would improve the reconstruction.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_1whfdr1whfdr1whf.png",
+      "filename": "Gemini_Generated_Image_1whfdr1whfdr1whf.png"
+    }
+  ],
+  "selection_reason": "Excellent image for 3D reconstruction. Clear object, simple background, and good lighting allow for effective depth perception and isolation."
+}

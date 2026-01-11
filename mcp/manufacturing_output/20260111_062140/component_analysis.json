@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Shared-Prong Emerald Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A classic anniversary style ring band featuring seven round-cut green gemstones (emeralds or tsavorites) set in 18k yellow gold. The setting utilizes a shared-prong vertical bar design with an open gallery side profile to maximize light return.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Mounting (Empty Chassis)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A highly detailed 3D design of an empty jewelry ring mounting, crafted in polished 18k yellow gold. The object is a continuous ring shank that thickens at the top to form a bridge setting. The top section features seven circular recessed seats prepared for round stones, but currently empty. Separating each seat are vertical, rectangular gold bars (shared prongs) standing upright. The side profile of the bridge features U-shaped open gallery cutouts beneath each setting seat to allow light through. The shank has a smooth, semi-domed 'comfort fit' profile. The surface is flawless, mirror-polished gold with strong specular highlights.",
+        "style_modifiers": "Product photography, macro lens, neutral gray background, sharp focus, CAD rendering style, high contrast metallic finish",
+        "negative_prompt": "gemstones, diamonds, green color, scratches, tarnished metal, blur, complex background, hand, finger",
+        "camera_angle": "Isometric 3/4 view showing both the top seats and side profile",
+        "lighting_description": "Studio lighting with softbox reflections to highlight the curvature of the gold"
+      },
+      "material_suggestion": "18k Yellow Gold (Polished)",
+      "shape_description": "Circular hoop with a raised, castellated top section containing 7 circular voids",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. Requires careful cleanup of the gallery wires and pre-polishing of the seats before stone setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Emerald Gemstone",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single, isolated round brilliant cut emerald gemstone. The stone features a vibrant, deep green color with slight internal translucency characteristic of high-quality emeralds. The geometry is a precise cone shape with a flat table top, angled crown facets, and a faceted pavilion coming to a point (culet) at the bottom. The texture simulates a vitreous, glass-like material with sharp refractive edges. No metal parts, just the floating loose stone.",
+        "style_modifiers": "Macro gem photography, pure white background, caustics, ray-traced refraction, photorealistic",
+        "negative_prompt": "metal, ring, prong, blue, red, opaque, scratches, dull",
+        "camera_angle": "Side profile view tilted 45 degrees to show crown and pavilion depth",
+        "lighting_description": "Backlit to show translucency and front lit for facet reflection"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shaped)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical/conical"
+      },
+      "position": "Mounted inside the seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Requires 7 matched stones. Standard round brilliant cut. Mohs hardness consideration required during setting."
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The primary manufacturing challenge is the casting of the fine gallery rails (the U-shapes under the stones) in Component 1. If 3D printed for casting, supports must be placed on the inside of the shank, not the gallery. Stones are set by pushing the vertical gold bars of Component 1 over the girdles of Component 2."
+}

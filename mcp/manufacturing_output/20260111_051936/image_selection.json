@@ -1,0 +1,48 @@
+{
+  "best_image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+  "best_score": 97,
+  "all_evaluations": [
+    {
+      "object_clarity": 25,
+      "background_simplicity": 25,
+      "lighting_quality": 18,
+      "view_angle": 14,
+      "object_isolation": 15,
+      "total_score": 97,
+      "issues": [],
+      "recommendation": "Excellent image for 3D reconstruction. Clear, well-lit, and isolated object with a simple background.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+      "filename": "Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png"
+    },
+    {
+      "object_clarity": 25,
+      "background_simplicity": 25,
+      "lighting_quality": 18,
+      "view_angle": 10,
+      "object_isolation": 15,
+      "total_score": 93,
+      "issues": [
+        "View angle is somewhat flat, making depth perception slightly limited."
+      ],
+      "recommendation": "The image is very suitable for image-to-3D conversion due to high clarity, simple background, good lighting, object isolation. The view angle could be slightly improved with a more pronounced 3/4 perspective.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_1whfdr1whfdr1whf.png",
+      "filename": "Gemini_Generated_Image_1whfdr1whfdr1whf.png"
+    },
+    {
+      "object_clarity": 24,
+      "background_simplicity": 18,
+      "lighting_quality": 17,
+      "view_angle": 14,
+      "object_isolation": 14,
+      "total_score": 87,
+      "issues": [
+        "Background is slightly distracting, could be simpler.",
+        "A wider view of the ring might improve 3D reconstruction."
+      ],
+      "recommendation": "The image is suitable for image-to-3D conversion. Consider using a simpler background and a slightly wider view of the object for potentially better results.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png",
+      "filename": "Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png"
+    }
+  ],
+  "selection_reason": "Excellent image for 3D reconstruction. Clear, well-lit, and isolated object with a simple background."
+}

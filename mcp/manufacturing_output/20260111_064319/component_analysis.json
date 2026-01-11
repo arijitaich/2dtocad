@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Shared Prong Emerald Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A classic half-eternity style ring featuring a polished 18k yellow gold band set with seven round brilliant-cut green emeralds. The setting utilizes a shared-prong gallery structure with an open-work under-gallery to maximize light entry.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mount / Chassis",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 18k yellow gold ring mount setting, devoid of gemstones. The object is a circular ring shank that thickens at the top to form a bridge containing seven adjacent circular seats for stones. Vertical gold prongs rise between each seat, currently standing straight up in an un-set position. The side profile reveals a scalloped under-gallery with U-shaped openings allowing light through the side. The metal is highly reflective, smooth, and polished yellow gold. The bottom of the shank is a simple tapered D-profile band.",
+        "style_modifiers": "Product photography, macro lens, sharp focus, 3/4 perspective view, neutral gray background, 8k resolution, photorealistic manufacturing rendering",
+        "negative_prompt": "gemstones, diamonds, emeralds, green color, scratches, blurred, noise, fabric background, fingers, hand",
+        "camera_angle": "Isometric 3/4 view",
+        "lighting_description": "Soft studio lighting with high contrast reflections to highlight the metallic curvature and prong details"
+      },
+      "material_suggestion": "18k Yellow Gold (Cast and Polished)",
+      "shape_description": "Torus-like base transitioning into a linear array of circular baskets with vertical protrusions (prongs)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. The model must account for shrinkage factors. Prongs must be cast longer than finished height to allow for bending over the stones."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Brilliant Cut Emerald",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant-cut emerald gemstone. The object is a precise geometric cone shape consisting of a flat top table, faceted crown, thin girdle, and faceted pavilion converging to a culet point. The material is a translucent, vibrant deep green crystal with internal light refraction and vitreous luster. The geometry is perfectly symmetrical with sharp, defined facet edges.",
+        "style_modifiers": "Macro gemology photography, ray-traced rendering, caustic lighting effects, clean white background, high fidelity",
+        "negative_prompt": "metal, ring, setting, inclusions, cracks, dust, gold, silver, multiple stones",
+        "camera_angle": "Side profile showing depth of the cut (pavilion and crown)",
+        "lighting_description": "Backlit to show translucency, front spotlight to create specular highlights on facets"
+      },
+      "material_suggestion": "Natural Emerald or Hydrothermal Synthetic Emerald",
+      "shape_description": "Conical polyhedron (Round Brilliant Cut)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Set within the 7 seats of the Ring Mount",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Requires 7 identical units. Stones must be calibrated to match the seat diameter of the mount (approx 3.0mm - 3.5mm)."
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "For 3D reconstruction, the ring is best generated as two separate assets (the metal mount and the stone) and then assembled. Generating them together often fuses the geometry, making it unsuitable for manufacturing analysis."
+}

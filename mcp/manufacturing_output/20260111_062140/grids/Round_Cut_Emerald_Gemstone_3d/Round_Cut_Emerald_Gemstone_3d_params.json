@@ -1,0 +1,146 @@
+{
+  "input_mesh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\3d_models\\Round_Cut_Emerald_Gemstone_3d.glb",
+  "square_size": 0.5,
+  "method": "connected",
+  "mesh_info": {
+    "vertices": 217415,
+    "faces": 836740,
+    "bounds_min": [
+      -1.0006576776504517,
+      -0.889139711856842,
+      -0.9983897805213928
+    ],
+    "bounds_max": [
+      0.9608818292617798,
+      0.8528457880020142,
+      0.9590635299682617
+    ],
+    "size": [
+      1.9615395069122314,
+      1.7419854998588562,
+      1.9574533104896545
+    ],
+    "surface_area": 8.660168482660747,
+    "volume": null,
+    "is_watertight": false
+  },
+  "grid_params": {
+    "square_size": 0.5,
+    "total_squares": 1000,
+    "coverage_type": "surface_sampled",
+    "connected": true,
+    "shared_vertex_count": 545,
+    "merge_threshold": 0.125,
+    "average_neighbors": 31.366
+  },
+  "outputs": {
+    "3dm": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grid.3dm",
+    "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grid.obj",
+    "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grid_data.json",
+    "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grasshopper.py"
+  },
+  "connected_info": {
+    "shared_vertices": 545,
+    "quad_patches": 1000,
+    "regions": {
+      "2": 153,
+      "5": 165,
+      "1": 149,
+      "0": 225,
+      "4": 152,
+      "3": 156
+    },
+    "region_layers": {
+      "2": {
+        "name": "Region_2_2",
+        "color": [
+          100,
+          100,
+          255,
+          255
+        ],
+        "quad_count": 153,
+        "average_normal": [
+          -0.5151447671141209,
+          -0.5725753843519041,
+          0.5211087563527144
+        ]
+      },
+      "5": {
+        "name": "Front_5",
+        "color": [
+          100,
+          255,
+          255,
+          255
+        ],
+        "quad_count": 165,
+        "average_normal": [
+          -0.3266890751596483,
+          0.8205997674269399,
+          -0.1635929891755452
+        ]
+      },
+      "1": {
+        "name": "Region_1_1",
+        "color": [
+          100,
+          255,
+          100,
+          255
+        ],
+        "quad_count": 149,
+        "average_normal": [
+          0.5339378676525005,
+          -0.558860470776121,
+          -0.5140454520224984
+        ]
+      },
+      "0": {
+        "name": "Front_0",
+        "color": [
+          255,
+          100,
+          100,
+          255
+        ],
+        "quad_count": 225,
+        "average_normal": [
+          0.22469846086439815,
+          0.8613667484951998,
+          0.12704058870699944
+        ]
+      },
+      "4": {
+        "name": "Region_4_4",
+        "color": [
+          255,
+          100,
+          255,
+          255
+        ],
+        "quad_count": 152,
+        "average_normal": [
+          0.5353677205924777,
+          -0.5477410254139216,
+          0.5131245353915223
+        ]
+      },
+      "3": {
+        "name": "Region_3_3",
+        "color": [
+          255,
+          255,
+          100,
+          255
+        ],
+        "quad_count": 156,
+        "average_normal": [
+          -0.522437539997015,
+          -0.5399417499452372,
+          -0.5442336366973068
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "product_name": "Yellow Gold Emerald Shared-Prong Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "An elegant 18k yellow gold ring band featuring a row of round-cut green gemstones (likely emeralds or tsavorites) set in a shared-prong vertical setting. The ring features a comfort-fit interior with a custom engraving.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mounting (Shank)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 3D model view of a gold ring mounting without gemstones. The object is an 18k yellow gold ring shank. The bottom half is a solid, smooth polished band with a D-shaped cross-section. The top half transitions into a setting structure featuring a row of vertical prongs and empty circular seats prepared for stone setting. The interior of the band is smooth gold with the word 'adhav' deeply engraved into the metal surface. The metal has a high-gloss reflective finish. The view shows the side profile clearly.",
+        "style_modifiers": "Product photography, macro lens, sharp focus, studio lighting, 3/4 view, neutral gray background, 8k resolution",
+        "negative_prompt": "gemstones, diamonds, green stones, plastic, low resolution, blurry, fingers, hand, background clutter",
+        "camera_angle": "Side profile view slightly rotated to show the empty settings and inner engraving",
+        "lighting_description": "Soft studio softbox lighting to highlight the metallic curvature and prong details without harsh glare"
+      },
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Toroidal band with integrated vertical prong structures on the upper arc",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Manufactured via lost-wax casting. The 3D model must include the engraving and the pre-cut seats for the stones to minimize metal removal during setting. Shrinkage factor of 2% should be accounted for gold casting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Emerald Gemstone",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant cut emerald gemstone. The stone is deep vivid green with slight internal inclusions characteristic of natural emeralds. It features a standard faceted geometry with a flat table, crown facets, thin girdle, and faceted pavilion. The material is translucent and refractive, simulating high-quality crystal or beryl. The object is floating in space.",
+        "style_modifiers": "Macro gem photography, ray-traced refraction, caustic lighting effects, isolated on white background",
+        "negative_prompt": "metal, ring, prongs, blue, red, opaque, rough stone, cluster",
+        "camera_angle": "Isometric view showing both table (top) and pavilion (bottom) depth",
+        "lighting_description": "High contrast transmission lighting to show transparency and color depth"
+      },
+      "material_suggestion": "Natural Emerald or Green Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shape with faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Mounted into the upper prong settings of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Standard calibrated stones (likely 2.5mm to 3mm). Sourced as loose stones, not manufactured. Requires precise cutting tolerance to fit the mounting seats."
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The primary manufacturing challenge is the casting of the text 'adhav' inside the shank, which requires high-resolution 3D printing of the wax master. The stones are set manually by bending the shared prongs over the girdle of the gems."
+}

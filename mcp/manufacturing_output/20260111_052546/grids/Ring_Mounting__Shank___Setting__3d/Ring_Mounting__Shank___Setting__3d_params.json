@@ -1,0 +1,38 @@
+{
+  "input_mesh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\3d_models\\Ring_Mounting__Shank___Setting__3d.glb",
+  "square_size": 0.5,
+  "method": "uv",
+  "mesh_info": {
+    "vertices": 330564,
+    "faces": 661112,
+    "bounds_min": [
+      -0.9996703863143921,
+      -0.9962942004203796,
+      -0.6181654334068298
+    ],
+    "bounds_max": [
+      0.9948646426200867,
+      0.9935532808303833,
+      0.6618955135345459
+    ],
+    "size": [
+      1.9945350289344788,
+      1.989847481250763,
+      1.2800609469413757
+    ],
+    "surface_area": 7.510220447880671,
+    "volume": 0.11648169979474328,
+    "is_watertight": true
+  },
+  "grid_params": {
+    "square_size": 0.5,
+    "total_squares": 1000,
+    "coverage_type": "surface_sampled"
+  },
+  "outputs": {
+    "3dm": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Ring_Mounting__Shank___Setting__3d\\Ring_Mounting__Shank___Setting__3d_grid.3dm",
+    "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Ring_Mounting__Shank___Setting__3d\\Ring_Mounting__Shank___Setting__3d_grid.obj",
+    "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Ring_Mounting__Shank___Setting__3d\\Ring_Mounting__Shank___Setting__3d_grid_data.json",
+    "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Ring_Mounting__Shank___Setting__3d\\Ring_Mounting__Shank___Setting__3d_grasshopper.py"
+  }
+}

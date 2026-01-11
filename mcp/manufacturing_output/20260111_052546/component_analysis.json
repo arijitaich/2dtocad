@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Emerald Shared-Prong Ring",
+  "product_category": "Fine Jewelry / Fashion Rings",
+  "overall_description": "A classic half-eternity style ring band crafted in yellow gold, featuring seven round-cut green gemstones (likely emeralds or tsavorites) set in a shared-prong gallery setting. The side profile features open U-shaped scallops to allow light entry.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mounting (Shank & Setting)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A detailed 3D rendering of an empty yellow gold ring mounting, isolated on a plain background. The object is a single continuous metal piece consisting of a polished circular shank that transitions into a top setting bar. The setting area contains seven circular seats (holes) arranged in a row, separated by vertical metal prongs. From the side view, the setting features U-shaped scalloped cutouts (gallery) beneath each seat. The metal has a highly reflective 18k gold finish. No gemstones are present; this is the raw metal casting. The prongs are upright and un-bent.",
+        "style_modifiers": "Product photography, macro lens, 3/4 perspective view, soft studio lighting, neutral gray background, high fidelity",
+        "negative_prompt": "gemstones, diamonds, green color, blurred edges, noise, rustic texture, silver, platinum",
+        "camera_angle": "Isometric view showing both the top seats and the side profile",
+        "lighting_description": "Softbox lighting to highlight the metallic curvature without harsh glare"
+      },
+      "material_suggestion": "18K Yellow Gold (Cast)",
+      "shape_description": "Toroidal base merging into a linear array of 7 circular baskets with vertical prongs.",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. Requires a single wax tree. Post-casting requires sprue removal, tumbling, and pre-polishing before stone setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Emerald",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single, isolated round brilliant-cut emerald gemstone. The stone is a deep, vivid green with high transparency and internal crystalline refraction. It features a flat top table and faceted crown and pavilion. The gemstone is loose and unset, floating in space. The cut geometry is precise and symmetrical. The material looks like glass or crystal with a vitreous luster.",
+        "style_modifiers": "Macro jewelry photography, ray-traced rendering, caustic lighting effects, white background",
+        "negative_prompt": "ring, metal, gold, prong, opaque, inclusion, dull, multiple stones",
+        "camera_angle": "Front view (45 degree tilt) to show table and depth",
+        "lighting_description": "High contrast lighting to emphasize facets and transparency"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shaped bottom, flat top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Mounted into the 7 seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Standard calibrated size (approx 3mm). 7 identical units required for assembly. Stones must be color-matched before setting."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The primary manufacturing challenge is the casting of the fine prongs in Component 1 to ensure they are distinct and strong enough to be bent over the stones during the setting process."
+}

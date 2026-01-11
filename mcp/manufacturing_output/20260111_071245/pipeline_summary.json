@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-01-11 07:15:37",
+  "input_folder": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples",
+  "output_directory": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245",
+  "square_size": 0.01,
+  "3d_engine": "hunyuan3d-2",
+  "image_selection": {
+    "best_image": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+    "best_score": 97,
+    "total_evaluated": 3,
+    "reason": "Excellent input. The studio lighting, clean background, and clear perspective make this an ideal candidate for high-quality 3D generation."
+  },
+  "product_name": "Seven-Stone Shared-Prong Emerald Ring",
+  "components_detected": 2,
+  "component_images": [
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\component_images\\component_1_Gold_Ring_Mounting__Shank_and_Setting_.jpg",
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\component_images\\component_2_Round_Brilliant_Cut_Emerald.jpg"
+  ],
+  "generated_3d": [
+    {
+      "component_name": "Gold Ring Mounting (Shank and Setting)",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\3d_models\\Gold_Ring_Mounting__Shank_and_Setting__3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\3d_models\\Gold_Ring_Mounting__Shank_and_Setting__3d.obj",
+      "generation_time": 22.53531002998352
+    },
+    {
+      "component_name": "Round Brilliant Cut Emerald",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\3d_models\\Round_Brilliant_Cut_Emerald_3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\3d_models\\Round_Brilliant_Cut_Emerald_3d.obj",
+      "generation_time": 24.3210711479187
+    }
+  ],
+  "tessellated": [
+    {
+      "component_name": "Gold Ring Mounting (Shank and Setting)",
+      "grid_outputs": {
+        "3dm": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Gold_Ring_Mounting__Shank_and_Setting__3d\\Gold_Ring_Mounting__Shank_and_Setting__3d_grid_connected.obj",
+        "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Gold_Ring_Mounting__Shank_and_Setting__3d\\Gold_Ring_Mounting__Shank_and_Setting__3d_grid.obj",
+        "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Gold_Ring_Mounting__Shank_and_Setting__3d\\Gold_Ring_Mounting__Shank_and_Setting__3d_grid_data.json",
+        "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Gold_Ring_Mounting__Shank_and_Setting__3d\\Gold_Ring_Mounting__Shank_and_Setting__3d_grasshopper.py"
+      },
+      "hollow_shell": null
+    },
+    {
+      "component_name": "Round Brilliant Cut Emerald",
+      "grid_outputs": {
+        "3dm": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grid_connected.obj",
+        "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grid.obj",
+        "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grid_data.json",
+        "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grasshopper.py"
+      },
+      "hollow_shell": null
+    }
+  ]
+}

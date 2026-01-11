@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-01-11 06:24:54",
+  "input_folder": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples",
+  "output_directory": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140",
+  "square_size": 0.5,
+  "3d_engine": "hunyuan3d-2",
+  "image_selection": {
+    "best_image": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+    "best_score": 97,
+    "total_evaluated": 3,
+    "reason": "Excellent image for 3D reconstruction due to high clarity, simple background, good lighting, appropriate view angle, and isolation of the object."
+  },
+  "product_name": "Seven-Stone Shared-Prong Emerald Ring",
+  "components_detected": 2,
+  "component_images": [
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\component_images\\component_2_Round_Cut_Emerald_Gemstone.png"
+  ],
+  "generated_3d": [
+    {
+      "component_name": "Round Cut Emerald Gemstone",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\3d_models\\Round_Cut_Emerald_Gemstone_3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\3d_models\\Round_Cut_Emerald_Gemstone_3d.obj",
+      "generation_time": 29.36235523223877
+    }
+  ],
+  "tessellated": [
+    {
+      "component_name": "Round Cut Emerald Gemstone",
+      "grid_outputs": {
+        "3dm": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grid.3dm",
+        "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grid.obj",
+        "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grid_data.json",
+        "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_062140\\grids\\Round_Cut_Emerald_Gemstone_3d\\Round_Cut_Emerald_Gemstone_3d_grasshopper.py"
+      }
+    }
+  ]
+}

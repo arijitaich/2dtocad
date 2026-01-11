@@ -1,0 +1,57 @@
+{
+  "product_name": "Seven-Stone Shared-Prong Emerald Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A classic half-eternity style ring band featuring seven round-cut green gemstones (likely emeralds or tsavorites) set in a shared-prong 18k yellow gold mounting. The design features a high-polished shank that transitions into an elevated gallery structure supporting the stones.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Mounting (Empty Setting)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 3D model of an empty gold ring mounting without gemstones. The object is an 18k yellow gold ring shank that tapers upwards into a curved setting bridge. The top gallery features seven circular empty basket seats arranged in a row. Vertical gold prongs rise between the empty seats in a shared-prong configuration. The metal surface is highly polished and reflective. The side profile shows open scallop detailing beneath each stone seat to allow light entry. The inside of the band is smooth and hallmarked.",
+        "style_modifiers": "Product photography, macro lens, studio lighting, soft shadows, 45-degree isometric view, neutral gray background, 8k resolution, CAD rendering style",
+        "negative_prompt": "gemstones, green stones, diamonds, scratches, tarnished metal, fingers, hand, blurred, low resolution, multiple rings",
+        "camera_angle": "Perspective view showing both the top seats and the side profile",
+        "lighting_description": "Softbox studio lighting to highlight the curvature of the gold and the depth of the empty seats"
+      },
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Torus base with an integrated linear-arc setting head featuring cylindrical voids for stone placement",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [],
+      "manufacturing_notes": "Manufactured via lost-wax casting. Requires a single mold. Post-casting requires sprue removal, tumbling, and pre-polishing before stone setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Emerald Gemstone",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single loose, round brilliant-cut emerald gemstone isolated in space. The stone is a deep, vibrant green with high transparency and internal crystalline facets. The geometry shows a flat top table, angled crown facets, a thin girdle, and a converging pavilion bottom. The surface has a vitreous luster. The stone is perfectly symmetrical and circular from the top view. High-fidelity geometric representation suitable for 3D reconstruction.",
+        "style_modifiers": "Macro photography, gemological imaging, brilliant lighting, caustics, sharp focus, white background",
+        "negative_prompt": "mounting, gold, metal, prongs, ring, inclusions, cloudy, opaque, broken, multiple stones",
+        "camera_angle": "Front 3/4 view to show table and pavilion depth",
+        "lighting_description": "Backlit and top-lit to show transparency and facet structure"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shape with faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Inserted into the seats of component_id 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Requires 7 identical units. Stones are set manually by pushing the prongs of Component 1 over the girdle of the stones."
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The shared prong setting requires precise casting tolerances to ensure the metal prongs are thick enough to hold two stones simultaneously without snapping during the setting process."
+}

@@ -1,0 +1,59 @@
+{
+  "product_name": "Four-Stone Shared-Prong Emerald Gold Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A refined 18k yellow gold ring featuring a partial eternity arrangement of four round-cut green gemstones (emeralds or tsavorites) held in a shared-prong setting. The ring features a polished D-profile shank with a personalized engraving 'adhav' on the interior.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Mounting (Chassis)",
+      "component_type": "Structural",
+      "image_generation_prompt": {
+        "main_prompt": "A high-quality 3D reference image of an empty gold ring mounting without gemstones. The object is made of 18k yellow gold with a highly polished mirror finish. The design features a continuous band that transitions into a setting head at the top. The setting area consists of four circular stone seats arranged in a row. Vertical prong structures rise between the seats to form a shared-prong mechanism. The side profile of the gallery features U-shaped cutouts beneath each stone seat position to allow light entry. The shank profile is rounded (D-shape) and smooth. The interior of the band is smooth and cylindrical. 3/4 view angle to show both the side profile and the top cavities for the stones.",
+        "style_modifiers": "Product photography, macro lens, studio lighting, softbox reflections, 3/4 perspective view, neutral mid-gray solid background (#808080), clean professional render, high resolution, sharp metallic details, gold material shader, no shadows on background",
+        "negative_prompt": "gemstones, diamonds, emeralds, filled settings, transparent background, white background, black background, noise, blurry, distorted geometry, scratches, rough texture",
+        "camera_angle": "3/4 perspective view looking slightly down at the empty stone seats",
+        "lighting_description": "Soft studio lighting with rim lights to highlight the gold edges and prong tips"
+      },
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Torus-based ring shank transitioning into a linear multi-seat bezel structure",
+      "dimensions_estimate": {
+        "relative_size": "large (main body)",
+        "shape_type": "complex toroidal with protrusions"
+      },
+      "position": "Main body",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. The mounting is cast as a single piece, then polished. Stone seats are burred to size before setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Emerald Gemstone",
+      "component_type": "Decorative/Insert",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant-cut emerald gemstone. The material is a vivid, deep forest green crystal with high transparency and vitreous luster. The object features standard brilliant faceting: a flat top table, angled crown facets, a thin girdle, and a conical pavilion terminating in a culet. The stone exhibits internal light refraction and sharp, crisp facet edges. The surface is highly reflective and glass-like. The color is rich and saturated green, typical of high-quality emerald or tsavorite.",
+        "style_modifiers": "Macro product photography, gemology style, sharp focus, caustic lighting effects, 3/4 perspective view, neutral mid-gray solid background (#808080), high resolution, ray-traced look",
+        "negative_prompt": "metal, ring, setting, jewelry, opaque, inclusion, cracked, dull, white background, black background, multiple stones",
+        "camera_angle": "Isometric view showing crown and pavilion depth",
+        "lighting_description": "Bright focused lighting to generate caustics and highlight internal facets"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut Cone",
+      "dimensions_estimate": {
+        "relative_size": "small (approx 3-4mm diameter)",
+        "shape_type": "faceted cone"
+      },
+      "position": "Set into the top gallery of the mounting",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Precision cut stone. Set into the mounting by notching the prongs and bending them over the stone's girdle."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The shared-prong setting requires precise spacing in the casting (Component 1) to ensure the stones (Component 2) fit snugly touching each other without overlapping. The engraving 'adhav' is a post-processing step likely done with laser engraving."
+}

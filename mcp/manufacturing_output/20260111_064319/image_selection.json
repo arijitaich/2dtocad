@@ -1,0 +1,47 @@
+{
+  "best_image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+  "best_score": 96,
+  "all_evaluations": [
+    {
+      "object_clarity": 25,
+      "background_simplicity": 25,
+      "lighting_quality": 18,
+      "view_angle": 13,
+      "object_isolation": 15,
+      "total_score": 96,
+      "issues": [],
+      "recommendation": "Excellent image for 3D conversion. All criteria are very well met, making it highly suitable.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+      "filename": "Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png"
+    },
+    {
+      "object_clarity": 25,
+      "background_simplicity": 25,
+      "lighting_quality": 18,
+      "view_angle": 10,
+      "object_isolation": 15,
+      "total_score": 93,
+      "issues": [
+        "The view angle is somewhat flat; a slightly more angled view would be preferable."
+      ],
+      "recommendation": "The image is highly suitable for 3D reconstruction due to excellent clarity, a simple background, and good lighting. While the view angle isn't perfect, the overall quality is high.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_1whfdr1whfdr1whf.png",
+      "filename": "Gemini_Generated_Image_1whfdr1whfdr1whf.png"
+    },
+    {
+      "object_clarity": 23,
+      "background_simplicity": 18,
+      "lighting_quality": 17,
+      "view_angle": 14,
+      "object_isolation": 14,
+      "total_score": 86,
+      "issues": [
+        "The background color is a bit busy, it would be better if it were a neutral color. The depth of field could be improved to show more detail."
+      ],
+      "recommendation": "The image is good and suitable for 3D reconstruction. The object is clear, isolated and has good lighting. It would be better if the background was simpler.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png",
+      "filename": "Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png"
+    }
+  ],
+  "selection_reason": "Excellent image for 3D conversion. All criteria are very well met, making it highly suitable."
+}

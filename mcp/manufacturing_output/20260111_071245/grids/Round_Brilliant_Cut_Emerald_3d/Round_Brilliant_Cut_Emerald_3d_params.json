@@ -1,0 +1,36 @@
+{
+  "input_mesh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\3d_models\\Round_Brilliant_Cut_Emerald_3d.glb",
+  "square_size": 0.01,
+  "method": "matrix",
+  "mesh_info": {
+    "vertices": 208815,
+    "faces": 807740,
+    "bounds_min": [
+      -0.9997639060020447,
+      -0.7507136464118958,
+      -0.9983277320861816
+    ],
+    "bounds_max": [
+      0.9603202939033508,
+      0.7475720643997192,
+      0.9587656259536743
+    ],
+    "size": [
+      1.9600841999053955,
+      1.498285710811615,
+      1.957093358039856
+    ],
+    "surface_area": 8.422981558399703,
+    "volume": null,
+    "is_watertight": false
+  },
+  "grid_params": {},
+  "outputs": {
+    "matrix_skin": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_matrix_skin.obj",
+    "wireframe_skin": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_wireframe_skin.obj",
+    "quad_skin": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_quad_skin.obj",
+    "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grid.obj",
+    "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grid_data.json",
+    "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_071245\\grids\\Round_Brilliant_Cut_Emerald_3d\\Round_Brilliant_Cut_Emerald_3d_grasshopper.py"
+  }
+}

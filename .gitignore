@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+venv/
+.env
+
+# Embedded repos
+Hunyuan3D-2/
+
+# Generated outputs (large binary files)
+*.glb
+*.obj
+*.stl
+*.3dm
+*.png
+*.jpg
+*.jpeg
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.log
+
+# Keep structure but ignore large outputs
+mcp/manufacturing_output/*/3d_models/
+mcp/manufacturing_output/*/component_images/

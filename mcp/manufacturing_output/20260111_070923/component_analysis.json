@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Emerald Shared-Prong Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A high-polish yellow gold ring band featuring a semi-eternity design with seven round-cut green gemstones (emeralds or tsavorites). The stones are secured in a shared-prong basket setting, allowing for maximum light exposure through the side gallery.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mounting (Cast Metal Body)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 3D view of an empty gold ring mounting, specifically the metal casting before stone setting. The object is 18k yellow gold with a high-gloss polished finish. The design features a shank that transitions into a top gallery containing seven empty circular seats (bezels) arranged in a row. Between each seat are vertical prongs standing upright. The side profile of the gallery shows U-shaped openwork bridges (basket style) connecting the prongs. The geometry is smooth, symmetrical, and metallic.",
+        "style_modifiers": "Product photography, macro lens, sharp focus, 3/4 perspective view, neutral white background, physically based rendering (PBR)",
+        "negative_prompt": "gemstones, green stones, diamonds, blurry, textured background, dark shadows, scratches",
+        "camera_angle": "Isometric view showing both the shank curve and the empty top settings",
+        "lighting_description": "Studio softbox lighting to create specular highlights on the gold curves without harsh black reflections"
+      },
+      "material_suggestion": "18k Yellow Gold (Castable Wax/Resin for manufacturing)",
+      "shape_description": "Circular toroid shank transitioning into a linear array of 7 cup-like structures with vertical pillars.",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Designed for lost-wax casting. Prongs must be cast long enough to be bent over stones during setting. Shrinkage allowance of 2-3% required for casting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Green Gemstone",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single, isolated round brilliant cut gemstone. The material is transparent Emerald or Tsavorite Garnet with a deep, vibrant green color. The object features precise geometric faceting: a flat top table, crown facets, a girdle, and a pointed pavilion bottom. The surface is vitreous and highly reflective, showing internal refraction and light play. It is a standalone object with no metal attached.",
+        "style_modifiers": "Macro jewelry photography, ray-traced, caustic lighting effects, sharp edges, solid grey background",
+        "negative_prompt": "metal, ring, prong, opaque, inclusions, multiple stones, blue, red",
+        "camera_angle": "Side profile view slightly elevated to show both crown and pavilion depth",
+        "lighting_description": "Backlighting to show translucency and top-down rim lighting to highlight facet edges"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shape with flat top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Mounted inside the 7 seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Standard calibrated size (approx 3.0mm - 3.5mm). Total quantity required: 7 units. Hardness must be considered for setting pressure."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The primary challenge in manufacturing is the 'shared prong' aspect of Component 1. The prongs must be split at the top to hold two adjacent stones simultaneously. The CAD file for Component 1 must have pre-cut seats to ensure the stones sit level."
+}

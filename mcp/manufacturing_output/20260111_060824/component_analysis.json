@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Shared Prong Eternity Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A high-polish yellow gold ring featuring a partial eternity band design with seven round brilliant-cut green gemstones (likely emeralds or tsavorites) held in a shared-prong setting with a scalloped gallery.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mounting (Chassis)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 3D model of an empty gold ring mounting without gemstones. The object is a ring shank that transitions into a setting area with seven empty circular seats for stones. Between each seat are vertical metal prongs standing upright. The side profile of the setting area features a scalloped, open gallery structure allowing light through. The bottom of the shank is a smooth, high-polish half-round band. Material is 18k yellow gold with a highly reflective metallic surface. The stone seats are recessed and clearly defined.",
+        "style_modifiers": "Product photography, macro lens, 3/4 perspective view, studio lighting, soft shadows, neutral gray background",
+        "negative_prompt": "gemstones, diamonds, green stones, scratches, matte finish, rustic, textured",
+        "camera_angle": "Isometric view showing both the shank and the top of the empty settings",
+        "lighting_description": "Softbox studio lighting to highlight the curvature of the gold and the depth of the empty stone seats"
+      },
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Circular ring with D-profile shank transitioning to a linear array of circular baskets/seats",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical/toroidal"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Designed for investment casting (lost wax). Prongs must be cast longer than finished height to allow for setting. Shrinkage compensation of 1.5-2.5% required for gold casting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Brilliant Gemstone",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant cut green gemstone. The object is a transparent emerald or tsavorite garnet. It features standard brilliant faceting: a flat octagonal table on top, triangular star facets, kite-shaped bezel facets, and a pointed culet at the bottom. The material is vitreous and transparent with deep green coloration and internal light refraction. The shape is a cone bottom with a faceted crown top. Sharp, precise geometric edges.",
+        "style_modifiers": "Macro gemology photography, ray-traced rendering, caustic lighting effects, isolated white background",
+        "negative_prompt": "metal, ring, gold, inclusions, cloudy, opaque, bezel",
+        "camera_angle": "Side profile view slightly elevated to show both crown and pavilion facets",
+        "lighting_description": "High contrast lighting to emphasize refractive index and faceting structure"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite",
+      "shape_description": "Round Brilliant Cut (Cone with faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical/conical"
+      },
+      "position": "Set into the seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Standard calibrated size (approx 3.0mm - 3.5mm). Requires careful handling during setting if using Emeralds due to Mohs hardness/brittleness."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The primary manufacturing complexity lies in the casting of the shared prongs; if they are too thin in the CAD/Wax stage, the metal flow may be insufficient. The stones are set manually after the metal component is cast and polished."
+}

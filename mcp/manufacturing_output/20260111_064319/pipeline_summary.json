@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-01-11 06:46:28",
+  "input_folder": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples",
+  "output_directory": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319",
+  "square_size": 0.02,
+  "3d_engine": "hunyuan3d-2",
+  "image_selection": {
+    "best_image": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+    "best_score": 96,
+    "total_evaluated": 3,
+    "reason": "Excellent image for 3D conversion. All criteria are very well met, making it highly suitable."
+  },
+  "product_name": "Seven-Stone Shared Prong Emerald Ring",
+  "components_detected": 2,
+  "component_images": [
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319\\component_images\\component_1_Ring_Mount___Chassis.png",
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319\\component_images\\component_2_Round_Brilliant_Cut_Emerald.png"
+  ],
+  "generated_3d": [
+    {
+      "component_name": "Ring Mount / Chassis",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319\\3d_models\\Ring_Mount___Chassis_3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319\\3d_models\\Ring_Mount___Chassis_3d.obj",
+      "generation_time": 25.166914463043213
+    },
+    {
+      "component_name": "Round Brilliant Cut Emerald",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319\\3d_models\\Round_Brilliant_Cut_Emerald_3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_064319\\3d_models\\Round_Brilliant_Cut_Emerald_3d.obj",
+      "generation_time": 25.298250675201416
+    }
+  ],
+  "tessellated": []
+}

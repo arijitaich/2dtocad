@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Shared-Prong Ring",
+  "product_category": "Fine Jewelry / Ring",
+  "overall_description": "A classic half-eternity style ring band crafted in 18k yellow gold, featuring seven round-cut green gemstones (likely emeralds or tsavorites) set in a shared-prong gallery setting with open side detailing.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Mounting (Shank & Gallery)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 3D model of an empty gold ring mounting without gemstones. The object is a continuous circular band made of polished 18k yellow gold. The bottom of the band is a smooth, solid half-round shank. The top half transitions into a setting gallery containing seven empty circular seats arranged in a slight arc. Between each circular seat are vertical, unbent prong pillars standing upright. The side profile of the gallery features U-shaped open windows beneath each seat to allow light entry. The surface is highly reflective gold metal. Focus on the geometry of the empty prong settings and the structural integrity of the bridge.",
+        "style_modifiers": "Product photography, macro lens, sharp focus, neutral gray background, 3D asset style, studio lighting",
+        "negative_prompt": "gemstones, diamonds, green color, blurred edges, noise, rustic texture, scratches, fabric",
+        "camera_angle": "Isometric view showing both the shank profile and the top setting area",
+        "lighting_description": "Softbox studio lighting to highlight metallic curves and gold sheen without excessive glare"
+      },
+      "material_suggestion": "18k Yellow Gold (Polished)",
+      "shape_description": "Torus base transitioning into a scalloped top gallery with vertical pillars",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical/ring"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. The CAD model must include pre-notched seats for the stones and prongs slightly longer than finished height to allow for setting/bending."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Green Gemstone",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant-cut green gemstone. The object is a faceted emerald or tsavorite. It features a flat top table, a crown with triangular facets, a thin girdle, and a conical pavilion underneath coming to a point (culet). The material is translucent deep green crystal with internal refraction and glassy luster. Sharp, precise geometric edges. No metal parts, just the stone floating in space.",
+        "style_modifiers": "Macro photography, gemology style, pure white background, ray-traced look",
+        "negative_prompt": "metal, ring, prong, opaque, plastic, blue, red, inclusions, dirt",
+        "camera_angle": "Side view 45 degrees to show table and pavilion depth",
+        "lighting_description": "Backlighting to showcase translucency and refraction, cool white highlights"
+      },
+      "material_suggestion": "Emerald or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone with faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical/conical"
+      },
+      "position": "Mounted inside the gallery seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Standard calibrated round cut stones. Requires 7 identical units for this specific assembly."
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The critical manufacturing tolerance lies in the gallery spacing. The shared prongs must be thick enough to hold two stones simultaneously but thin enough not to obscure the gems. Digital reconstruction should focus on the empty mounting state to accurately capture the prong geometry before they are bent over the stones."
+}

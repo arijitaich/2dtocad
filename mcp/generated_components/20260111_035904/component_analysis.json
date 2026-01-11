@@ -1,0 +1,59 @@
+{
+  "product_name": "Yellow Gold 4-Stone Emerald Ring",
+  "product_category": "Jewelry",
+  "overall_description": "A high-polish yellow gold ring featuring a partial eternity style setting with four round-cut green gemstones (emeralds or tsavorites) held in a shared prong setting. The ring shank has a 'D' profile that transitions into a basket gallery structure. The interior of the shank features an engraving reading 'adhav'.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mounting (Shank & Setting)",
+      "component_type": "Structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 18k yellow gold ring mounting (empty setting) on a neutral mid-gray solid background (#808080). The object is a ring shank that transitions into a high-profile shared-prong setting head designed to hold four round gemstones. The metal surface is highly polished yellow gold with a mirror-like finish. The shank has a rounded outer profile and a flat interior. The setting area features delicate vertical prongs rising from a gallery rail, creating four distinct circular seats (bearings) for stones. The view should clearly show the empty prongs and the structural bridge underneath where the stones would sit. The shape is elegant and architectural.",
+        "style_modifiers": "Jewelry product photography, macro lens, studio lighting, 3/4 isometric view, neutral mid-gray solid background (#808080), clean professional render, high resolution, sharp details, no shadows on background, physically based rendering (PBR)",
+        "negative_prompt": "gemstones, diamonds, green stones, transparent background, white background, black background, noise, grainy, scratches, tarnished metal, distorted prongs, text, watermark",
+        "camera_angle": "3/4 isometric view looking slightly down at the setting seats",
+        "lighting_description": "Softbox studio lighting to create long, continuous reflection lines on the gold curvature, emphasizing the polish without blowing out highlights."
+      },
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Toroidal band transitioning into a linear array of four basket-style settings with vertical prongs.",
+      "dimensions_estimate": {
+        "relative_size": "large",
+        "shape_type": "toroidal/cylindrical"
+      },
+      "position": "Base structure of the product",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Likely produced via lost-wax casting as a single piece, then polished. Engraving is laser-etched or stamped inside."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Emerald Gemstone",
+      "component_type": "Decorative/Functional",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant cut emerald gemstone on a neutral mid-gray solid background (#808080). The gemstone is a vibrant, deep translucent green. The image must clearly define the facet structure, showing the flat top table, the angled crown facets, the girdle, and the converging pavilion facets underneath. The material should appear glass-like and refractive, with slight internal inclusions characteristic of natural emeralds. The surface has a vitreous luster. The object is floating in space to reveal the geometry of the culet (bottom point).",
+        "style_modifiers": "Gemological photography, macro shot, bright studio lighting, 3/4 view angle, neutral mid-gray solid background (#808080), ray-traced refraction, high contrast, sharp edges",
+        "negative_prompt": "metal, ring, prong, jewelry setting, opaque, dull, plastic looking, white background, black background, multiple stones",
+        "camera_angle": "3/4 front view showing both the crown (top) and pavilion (bottom) depth",
+        "lighting_description": "High-intensity directional lighting to generate caustic reflections and highlight the internal facet structure and transparency."
+      },
+      "material_suggestion": "Emerald (Beryl) or Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shape bottom, faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small (approx 3.0mm diameter)",
+        "shape_type": "conical/faceted"
+      },
+      "position": "Four instances placed sequentially in the setting head of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Precision cut and polished lapidary work. Set manually by bending prongs of Component 1 over the girdle of the stone."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "For 3D reconstruction, it is critical to model the gemstone separately from the gold band because of the different optical properties (refraction vs reflection). In the final assembly, Component 2 (Gemstone) is instanced 4 times and placed into the seats of Component 1."
+}

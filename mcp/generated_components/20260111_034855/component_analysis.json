@@ -1,0 +1,59 @@
+{
+  "product_name": "Four-Stone Linear Prong-Set Ring",
+  "product_category": "Jewelry / Rings",
+  "overall_description": "A refined yellow gold ring featuring a linear arrangement of four round-cut green gemstones (likely emeralds or tsavorites) held in a prong setting. The band features a smooth D-profile shank with internal engraving.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Mounting (Shank & Settings)",
+      "component_type": "Structural / Chassis",
+      "image_generation_prompt": {
+        "main_prompt": "A photorealistic, high-quality reference image of a solid 18k yellow gold ring mounting, depicted without gemstones. The object consists of a circular band with a D-shaped cross-section that transitions at the top into a linear gallery containing four empty circular basket settings. Each setting features vertical prongs rising from the bridge, designed to hold round stones. The metal surface is highly polished, reflective, and smooth, showing a lustrous gold sheen. The image clearly displays the four empty cavities (seats) and the structural prongs. The interior of the band is smooth.",
+        "style_modifiers": "Product photography, macro lens, studio lighting, 3/4 perspective view, neutral mid-gray solid background (#808080), clean professional render, high resolution, sharp details, soft reflections, no shadows on background",
+        "negative_prompt": "gemstones, diamonds, stones, transparent background, white background, black background, text, engraving, scratches, tarnished metal, blurry, low poly, distorted geometry",
+        "camera_angle": "Isometric 3/4 view focusing on the empty settings",
+        "lighting_description": "Softbox studio lighting to highlight the gold contours and prong details without harsh glare"
+      },
+      "material_suggestion": "18K Yellow Gold (Polished)",
+      "shape_description": "Circular toroid band transitioning into a linear array of four cylindrical basket settings with vertical prongs",
+      "dimensions_estimate": {
+        "relative_size": "large (main body)",
+        "shape_type": "Complex Ring Geometry"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via SLA 3D printing of wax/resin followed by lost-wax casting in gold. Requires post-casting polishing before stone setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Green Gemstone",
+      "component_type": "Decorative / Inlay",
+      "image_generation_prompt": {
+        "main_prompt": "A single, isolated round brilliant-cut green emerald gemstone. The stone exhibits a deep, vibrant green color with slight internal characteristics typical of emeralds. It features precise geometric faceting on the crown and pavilion, a flat top table, and a pointed culet. The material is translucent crystalline with a high refractive index, displaying light refraction and varying shades of green depth. The stone appears distinct and unmounted.",
+        "style_modifiers": "Macro product photography, gemology style, studio lighting, 3/4 floating view, neutral mid-gray solid background (#808080), clean professional render, 8k resolution, ray-traced refraction, sharp edges",
+        "negative_prompt": "metal, ring, prong, setting, blue, red, opaque, scratches, dust, white background, black background, multiple stones",
+        "camera_angle": "3/4 view showing both crown and pavilion depth",
+        "lighting_description": "Backlighting and key light to showcase translucency and facet refraction"
+      },
+      "material_suggestion": "Emerald or Green Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone bottom, faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small (approx 3mm diameter)",
+        "shape_type": "faceted sphere/cone"
+      },
+      "position": "Mounted in the four settings atop Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Lapidary cut and polished. Requires 4 identical units for this assembly."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The image shows a brand engraving 'adhav' on the inner shank. This should be applied as a texture map or displacement map on Component 1 after the geometry is finalized, rather than modeled into the base mesh for the initial reconstruction."
+}

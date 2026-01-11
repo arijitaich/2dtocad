@@ -1,0 +1,38 @@
+{
+  "input_mesh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\3d_models\\Round_Cut_Emerald_3d.glb",
+  "square_size": 0.5,
+  "method": "uv",
+  "mesh_info": {
+    "vertices": 2554963,
+    "faces": 5109682,
+    "bounds_min": [
+      -1.0006343126296997,
+      -0.9999015927314758,
+      -1.0003517866134644
+    ],
+    "bounds_max": [
+      0.9951930642127991,
+      0.9946709275245667,
+      0.9948781132698059
+    ],
+    "size": [
+      1.9958273768424988,
+      1.9945725202560425,
+      1.9952298998832703
+    ],
+    "surface_area": 55.67974077002476,
+    "volume": null,
+    "is_watertight": false
+  },
+  "grid_params": {
+    "square_size": 0.5,
+    "total_squares": 1000,
+    "coverage_type": "surface_sampled"
+  },
+  "outputs": {
+    "3dm": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Round_Cut_Emerald_3d\\Round_Cut_Emerald_3d_grid.3dm",
+    "obj": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Round_Cut_Emerald_3d\\Round_Cut_Emerald_3d_grid.obj",
+    "json": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Round_Cut_Emerald_3d\\Round_Cut_Emerald_3d_grid_data.json",
+    "gh": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_052546\\grids\\Round_Cut_Emerald_3d\\Round_Cut_Emerald_3d_grasshopper.py"
+  }
+}

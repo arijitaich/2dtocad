@@ -1,0 +1,78 @@
+{
+  "product_name": "Four-Stone Green Gemstone Ring in Yellow Gold",
+  "product_category": "Jewelry",
+  "overall_description": "A fine jewelry piece featuring a yellow gold band with a linear arrangement of four round-cut green gemstones (likely emeralds or tsavorites) secured in a high-profile prong setting. The ring features a polished finish and internal engraving.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Shank (Band)",
+      "component_type": "structural",
+      "search_keywords": [
+        "comfort fit ring shank",
+        "gold ring band profile",
+        "half round ring shank"
+      ],
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Circular toroid segment with a 'D' profile (flat interior, domed exterior). Tapers slightly in thickness towards the base.",
+      "dimensions_estimate": {
+        "relative_size": "large (main body)",
+        "shape_type": "cylindrical/toroidal"
+      },
+      "position": "Base of the ring, encircling the finger",
+      "connections": [
+        2
+      ],
+      "manufacturing_notes": "Cast as a single unit with the setting head. Includes internal laser engraving 'adhav'. Requires high polish."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Prong Setting Gallery",
+      "component_type": "functional/structural",
+      "search_keywords": [
+        "shared prong setting structure",
+        "jewelry basket setting",
+        "U-prong ring setting CAD"
+      ],
+      "material_suggestion": "18k Yellow Gold",
+      "shape_description": "Linear array of four basket-style seats with vertical prongs rising from the bridge. Open side-profile design to allow light entry.",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "complex/structural cage"
+      },
+      "position": "Top center of the ring, integrated into the shank",
+      "connections": [
+        1,
+        3
+      ],
+      "manufacturing_notes": "Likely modeled and cast integrally with the shank (Component 1). Prongs must be cast longer than finished height to allow for setting/burring over the stones."
+    },
+    {
+      "component_id": 3,
+      "component_name": "Round Faceted Gemstones (x4)",
+      "component_type": "decorative",
+      "search_keywords": [
+        "round brilliant cut emerald",
+        "round tsavorite garnet",
+        "faceted green gemstone"
+      ],
+      "material_suggestion": "Emerald, Tsavorite, or Green Tourmaline",
+      "shape_description": "Round Brilliant Cut (faceted cone shape)",
+      "dimensions_estimate": {
+        "relative_size": "small (approx 3mm diameter each)",
+        "shape_type": "conical/spherical"
+      },
+      "position": "Mounted inside the Prong Setting Gallery",
+      "connections": [
+        2
+      ],
+      "manufacturing_notes": "Stones must be matched in color and size. Set by cutting seats into the prongs and pushing metal over the girdle."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2,
+    3
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The assembly process involves 'Lost Wax Casting' for the metal components (1 and 2 combined), followed by cleanup/sprue removal, pre-polishing, stone setting (hand labor), and final buffing. The engraving is likely applied via laser after casting or included in the 3D print/wax model."
+}

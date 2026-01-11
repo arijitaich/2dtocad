@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Emerald Shared-Prong Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A classic anniversary or eternity-style ring featuring a row of seven round-cut green gemstones (likely emeralds or tsavorites) set in an 18k yellow gold shared-prong setting with an open gallery structure.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Ring Mounting (Shank and Setting)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A photorealistic isolated 3D view of an 18k yellow gold ring mounting without gemstones. The object consists of a tapered circular band (shank) that widens at the top into a curved setting gallery. The gallery features seven circular open-work seats or baskets arranged in a row. Vertical gold prongs rise between the seat positions to hold stones. The surface is highly polished yellow gold with strong specular highlights and metallic reflections. The inner band is smooth and convex. Show the empty metal framework clearly.",
+        "style_modifiers": "Jewelry product photography, macro lens, 45-degree isometric view, neutral gray background, soft studio lighting, high contrast",
+        "negative_prompt": "gemstones, diamonds, inclusions, scratches, blur, low resolution, dark shadows",
+        "camera_angle": "Isometric 3/4 view",
+        "lighting_description": "Softbox studio lighting to highlight metallic curves without harsh glare"
+      },
+      "material_suggestion": "18K Yellow Gold (Cast)",
+      "shape_description": "Toroidal band transitioning into a scalloped linear gallery with vertical extrusions (prongs)",
+      "dimensions_estimate": {
+        "relative_size": "medium",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. Requires polishing of the gallery area before stone setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Cut Green Gemstones (x7)",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated round brilliant-cut emerald gemstone. The object features precise geometric faceting, a vibrant forest green color, and translucent crystalline material properties. The stone shows internal light refraction, brilliance, and a glassy luster. The shape is a perfect circle from the top view with a pointed pavilion at the bottom. Sharp facet edges and high clarity.",
+        "style_modifiers": "Macro gemology photography, sharp focus, caustic lighting rendering, white background",
+        "negative_prompt": "ring, metal, gold, prongs, opaque, dull, blue, red, inclusions",
+        "camera_angle": "Front view (table up)",
+        "lighting_description": "Backlit and top-lit to show translucency and refraction"
+      },
+      "material_suggestion": "Emerald / Tsavorite Garnet / Green Tourmaline",
+      "shape_description": "Round Brilliant Cut (Cone shaped bottom, flat top)",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Set within the gallery seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Standard calibrated round cut (est. 3mm). Stones must be matched for color and size before setting."
+    }
+  ],
+  "assembly_order": [
+    1,
+    2
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The primary manufacturing challenge is the casting of the fine prongs in Component 1. The 3D reconstruction needs to accurately capture the negative space in the gallery (the bridge under the stones) to ensure the model is castable."
+}

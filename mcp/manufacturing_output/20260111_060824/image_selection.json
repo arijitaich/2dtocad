@@ -1,0 +1,47 @@
+{
+  "best_image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+  "best_score": 96,
+  "all_evaluations": [
+    {
+      "object_clarity": 24,
+      "background_simplicity": 25,
+      "lighting_quality": 18,
+      "view_angle": 14,
+      "object_isolation": 15,
+      "total_score": 96,
+      "issues": [],
+      "recommendation": "Excellent image for 3D reconstruction. The object is clear, the background is simple, the lighting is good, and the view angle is suitable.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+      "filename": "Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png"
+    },
+    {
+      "object_clarity": 25,
+      "background_simplicity": 25,
+      "lighting_quality": 20,
+      "view_angle": 10,
+      "object_isolation": 15,
+      "total_score": 95,
+      "issues": [
+        "Slightly flat view of the ring."
+      ],
+      "recommendation": "Excellent image for 3D reconstruction. The object is well-lit, in focus, and isolated on a simple background. A more angled view would improve the reconstruction.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_1whfdr1whfdr1whf.png",
+      "filename": "Gemini_Generated_Image_1whfdr1whfdr1whf.png"
+    },
+    {
+      "object_clarity": 24,
+      "background_simplicity": 18,
+      "lighting_quality": 17,
+      "view_angle": 14,
+      "object_isolation": 14,
+      "total_score": 87,
+      "issues": [
+        "The background could be more neutral. Some may find the dark green distracting."
+      ],
+      "recommendation": "The image is suitable for 3D reconstruction. The object is clear and well-lit.  A simpler background would improve the result.",
+      "image_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png",
+      "filename": "Gemini_Generated_Image_r2cyo6r2cyo6r2cy.png"
+    }
+  ],
+  "selection_reason": "Excellent image for 3D reconstruction. The object is clear, the background is simple, the lighting is good, and the view angle is suitable."
+}

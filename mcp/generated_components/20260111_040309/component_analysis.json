@@ -1,0 +1,79 @@
+{
+  "product_name": "Yellow Gold Shared-Prong Emerald Eternity Ring",
+  "product_category": "Jewelry",
+  "overall_description": "A sophisticated fine jewelry piece consisting of an 18k yellow gold band with a high-polish finish. The design features a partial eternity style setting with round brilliant-cut green gemstones (likely emeralds or tsavorites) secured in a shared-prong vertical gallery setting. The ring shank has a comfort-fit profile and features an internal engraving reading 'adhav'.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Casting (Shank and Setting)",
+      "component_type": "Structural",
+      "image_generation_prompt": {
+        "main_prompt": "A high-quality macro product shot of an 18k yellow gold ring mounting without gemstones. The object is a single continuous metal piece consisting of a polished circular shank that transitions into a gallery of vertical prongs at the top. The setting area features a row of empty circular baskets with shared prongs designed to hold round stones. The metal has a luxurious mirror-like yellow gold finish with high reflectivity. The shank profile is half-round/comfort-fit. The geometry is precise and symmetrical.",
+        "style_modifiers": "Product photography, macro lens, studio lighting with softboxes, 3/4 perspective view, neutral mid-gray solid background (#808080), clean professional render, high resolution, sharp details, no shadows on background, physically based rendering",
+        "negative_prompt": "gemstones, diamonds, stones, transparent background, white background, black background, multiple objects, text, engraving, watermarks, blurry, low quality, distorted proportions, noise, grain",
+        "camera_angle": "Isometric 3/4 view showing both the side profile and the top setting area",
+        "lighting_description": "Three-point studio lighting to accentuate the curvature of the gold and the depth of the empty prong settings"
+      },
+      "material_suggestion": "18k Yellow Gold (Polished)",
+      "shape_description": "Torus-like base transitioning into a linear array of U-shaped baskets/prongs",
+      "dimensions_estimate": {
+        "relative_size": "large (main body)",
+        "shape_type": "Ring/Torus with complex upper gallery"
+      },
+      "position": "Base structure of the product",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. The model requires support structures for the prongs during casting. Post-processing involves tumbling, sanding the sprue mark, and high-polishing before stone setting.",
+      "meshy_task_id": "019baa0c-ab30-7087-81b0-38e3d654e8af",
+      "model_urls": {
+        "glb": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-ab30-7087-81b0-38e3d654e8af/output/model.glb?Expires=1768343870&Signature=Y~EntF4YmhIGTrOSBAp3xLLlADGHRSm25Q55rfbsZPspAxuXghhfldgZbxSjj1kYlGyIoTCZ3xGhrwUzFkCgH1U5anUD~eeRhsJwJEvmMwh8fjldzBQ50Yw~bvQGBLeT2zpXG4NN5YzMXnSeR6dZrP6xAqDKWwX-RfrSEOhCH6x2yuaBWNC1qAg-~TW~4mZXz9qmvuK6Jz0noQsO~JDitj-FaN4KnMnGmc3kbFI1qoV7CP35ZfFhSW8IJTHKyP5~00uv9F1mmg9oZ5dtPuX5i8MKh-oI3hGfFHQ0MJJSiVym2UkfqsH9vf1QlkDwnI4Xw9uz53RsVlSWJDrsfaT-mw__&Key-Pair-Id=KL5I0C8H7HX83",
+        "fbx": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-ab30-7087-81b0-38e3d654e8af/output/model.fbx?Expires=1768343870&Signature=qDNbm66~tWpWw2XHMQRnKivl61hup4QAPtGwMUD4OCOn3qnM5a0W~RAIolJVo4AvE5rVlKJm3R~Aa5P8fMf2ERien38HCI~~qvZA6hHfMtIOEMMIrNHnkBvanN3jJNO2cq7NniSmgO0wIbj~kaE04DwGHnsb18k81l29u-ADX3azmrKBGpx0jrUUXFc2ARCa0mvwWDHvh1RUuu18tD4QRuHeKoVFAY9Aqr5wZrNvzOpVjPjI3lYoQdfKFli2JRYQHBt9Fbjwix-U2rFMboDppr8VYtQ29wgtkXu7xv7~zLW3oTuUR7RfCRdLWmecZiTcqo10JeK2wH-3jpeQPeCtMg__&Key-Pair-Id=KL5I0C8H7HX83",
+        "usdz": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-ab30-7087-81b0-38e3d654e8af/output/model.usdz?Expires=1768343870&Signature=axVwC-Q~lm2MuoKq11Q53Wu9fexTJgG3m~A1tkzYLfRxyOxy8-vm90Or3OGXbmfmP83KmIzE9RczVw6Mu~7V1h-5bx7LA2AAEK2ZGMx1z3ZDJEGibJuOxBifRiV1N-0vkASqAJsRR15Lwro~PTSefHXryKewUtD1b7dQZI3K-kqnuXizljudLG2Ri8uUrxPiWeXJLk2fsFlH1cDGX2N3HeRTB4tgObcfjUoY~eGQjQW7l8Fj4cbYiXzDe520cZo3BenmoK05PRxQFUD2J-tNa4Ibz2X3gB7nPsnqPGMDAFFmomASkJQyY2IR61ImmPlcIgzuPM-WfDjWdWpE5BPkTA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "obj": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-ab30-7087-81b0-38e3d654e8af/output/model.obj?Expires=1768343870&Signature=D9R4twuYhm-Z0PWbQikdggn4Fmv1U19~M4pasFmk8~z6KfUXAw2gHNxagejkhAPMFQqPLeQHTuNqiyBjAc-MWmXA8zGQSyNpejPM4nNteHsxj9vjeHSZB5PaE2Tq6PkQ~m-1KV~xzJfOJwQR-XnqzK6rWw2xn65F-J7bWMcTnKsOtMU1UbrqZua8TorU8qCgxKNyekEAIVMuAbCgJgiipETxdzI9xOKEoufenH4slZwfJIRFFBGf9dEnP~YtMs-CO74c7I0FflvtZVwEjOxrkrnw2YhrmMNhwM~Ux4gti3yP3gPnhvV5D8az-~oFRHs4GApY3yW36UWi7CZtzskv0w__&Key-Pair-Id=KL5I0C8H7HX83",
+        "mtl": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-ab30-7087-81b0-38e3d654e8af/output/model.mtl?Expires=1768343870&Signature=KeRq3Mt24E9gT4L4Q7k6MgwKF65MumdCwpqsX3pIZNhf0MK-x7rp0-RndUzXPy7lSc-AEjCe9Q05NCZnvttnoat-hvobX5wdfOoPXQlKnjQSpsnWAG7~49kDufeKQTprcQbhoaivZqEpwjexig-0OZn9nYhkUJWNbe2lsc8ebr1CMGJ89sXqcxyEfDcuAQqfA-9g-OuWLeVdXxPACSwxPOlvb4-zr0tpMWI0QXnV872F2SCsc73y0VO8XLhzr0tvcy-yRNrJa9-CR-iUjYKLFrwRjZ93us4nTEMq3JN10mCMQKKoWQ6df~OmqPKr3kv7Asgp1E7QDnl6bGdeY34CWQ__&Key-Pair-Id=KL5I0C8H7HX83",
+        "pre_remeshed_glb": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-ab30-7087-81b0-38e3d654e8af/output/pre_remeshed_model.glb?Expires=1768343870&Signature=cnhyM~JBydzC5l6KboQja1v~ggYbEoMWE~DgI7aQ2D1mbUjo024JomnUnTFquMqZfRK9LcOmavxhTBFHb6FL-mxU1iHMK2Nz5Iv81oyn1DC1u93Cs7QbAZeMlFWJlYrL6cfS5y1Oe-iEhGJfpFKfeLVH4RBX1-Jad7MlfKwdcWnspYu7Pr8H9dTroXsD0Im4RdWDV3G7BNvjaVVoCjtNxOW1iQNYecIiFsbZ5iNQcP2EsPJMpISQCwi9hOo7Pf1H6pomkVfbyhc5LWnQdeROmcgCwit9d2qkxe23w5a0Xc4S88l4Iiwuk9Ca41ApPGAmGiYtRklcUcLksP9VFahBBQ__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "local_glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\generated_components\\20260111_040309\\Gold_Ring_Casting__Shank_and_Setting__3d.glb"
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Brilliant Emerald",
+      "component_type": "Decorative/Functional",
+      "image_generation_prompt": {
+        "main_prompt": "A single, exquisite round brilliant-cut emerald gemstone. The stone exhibits a deep, vibrant forest green color with characteristic translucency and crystalline depth. The geometry includes a flat top table, faceted crown, girdle, and a faceted pavilion coming to a point (culet) at the bottom. The surface has a vitreous luster, reflecting light with sharp specular highlights. The faceting pattern is precise and symmetrical.",
+        "style_modifiers": "Macro gem photography, studio lighting, 3/4 view angle showing crown and pavilion, neutral mid-gray solid background (#808080), clean professional render, high resolution, sharp details, no shadows on background, ray-traced refraction",
+        "negative_prompt": "metal, ring, jewelry, mounting, multiple stones, opaque, plastic looking, cartoonish, white background, black background, text, watermark",
+        "camera_angle": "3/4 view from slightly above to show table facet and depth of pavilion",
+        "lighting_description": "Backlighting to show translucency and green color, combined with front reflection mapping for facet definition"
+      },
+      "material_suggestion": "Emerald (Beryl) or Green Tsavorite Garnet",
+      "shape_description": "Round Brilliant Cut (Cone shape bottom, domed faceted top)",
+      "dimensions_estimate": {
+        "relative_size": "small (multiple instances required)",
+        "shape_type": "Round Brilliant Faceted Cone"
+      },
+      "position": "Mounted within the prongs at the top of component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Stones are sourced and sorted for color matching. Set manually by pushing the gold prongs of component 1 over the girdle of the stones.",
+      "meshy_task_id": "019baa0c-b412-7087-bb6d-2f1e47e72779",
+      "model_urls": {
+        "glb": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-b412-7087-bb6d-2f1e47e72779/output/model.glb?Expires=1768344052&Signature=HmptLyjNIwlVhkqwaEaMKnMVSRjQTfCJDgVHOho2qAgPc0CMzjWBys-7PKng7Wv3sNk3b1TmFuPgd3-iTqMPCytQ8LYOH8htI91HNnfUH6KsfSrEzaoaTROEDwVIyNrukJ1PQ-DSRWo6HlEsn-MmQ-xJ9bByYYUKetby~TKTrF-BPMrXJ8NfracSZH~5~Jei4aNumP1upBhTY~VCzdLtV164PwXnxISZa0pmJ3E~vfqWCjDtpKgOlb3~dV4ynq0e2Lvomy00nTRJzeINX7FJKDGCUcPvYX9mFg6VYOiCciIKw~dsj5sFgkCvKDP~ByGomp4T~nOeifNK~2EZg9WukA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "fbx": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-b412-7087-bb6d-2f1e47e72779/output/model.fbx?Expires=1768344052&Signature=sxWRLbA2ypuLLqunK9S-8XN9GAN-cvSXfpDalsSYaT8O34H03cZRnEClHNRzKgshlq5u93gODot10yqB8UoxMU5WWfoloSD26pY329265JwmVWphr4rolEY2eHWeNkdB0DN7qDUy2jDj9SPGbtZlTsWeBaYMQLRZ7Hlkl5YGWLi8xGc3eC-WtTzGKW0bo4qBh-E3tduQNmASBYnMkXi4xOCkglIkaqSWuHCKytGc5hdH9SLkASrfDyI2Vi27s0W7CutdWSlf-UyGKCuRKhKiIV2Tu4RID6qNB-lsKoeT-ytF5VzwCwcMcn7s9ieGOkRlnNf1gVHFjyaff6L4YpxHoA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "usdz": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-b412-7087-bb6d-2f1e47e72779/output/model.usdz?Expires=1768344052&Signature=YXMNiFEZtUIhKq8Nb8H7a8FOo2RBZ4lbKrhKuptQC8ffkplVtiQzek~lYge-Lwe1kbs-UrPKyErA-k5Ujc-bimLVBK142wWyE43tgOOwjurO78X-7DD6AwKk6DJ6pWVl~7xozOfO5ofXfUZ8iiOCt56bDtEVc2yjFKewC~oAn4S6ZP~nJ8r9UjQ0LY3g7ze7zBOHuMyYj9ofP2WLeF9N-H0Zhe2Hj-8VH9EJD9m6kyqREJG5MXjw7WDQ6ytU-Df3WchRmatAopUJN42lJnwOxGcOxa8sw6Ewb9maQatfUopKINKP~bHMC2uMRbnfEgBoQ9dcCGF~ydebZKY~OoDMjQ__&Key-Pair-Id=KL5I0C8H7HX83",
+        "obj": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-b412-7087-bb6d-2f1e47e72779/output/model.obj?Expires=1768344052&Signature=hdNp8z1LNXolv2mdweV4Sx1BbL42I2cX249ZrolmbLHrieBiEHW7SmHcn2TseA-3KNTjJ6wJNNOQgm6QB7O2i9r~vGyZUPqPoOP-5nLpR2VdnBiYK3U0fv83qtG36pJtSJK7p0w4X1vPyAM~6JKW7dwl1nl51OGayGLx3FztayVzZptYCBCX8FN9ISuplHA03VNZs-pcK-NxEfT6e2EHmZsq0skQBxIjNILakVZjnYZ1dvjsBKmvR4SObFlAtBTYDAEqDzECh6djsNMdFXz53JZ-rXyydCZ9I3OXPLKvKJf63ojJswsKfg-xKCDdEnOOcucE12eCbMQf8zURapdxnw__&Key-Pair-Id=KL5I0C8H7HX83",
+        "mtl": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-b412-7087-bb6d-2f1e47e72779/output/model.mtl?Expires=1768344052&Signature=H62LR2tkcK0qxSKogQ5uEgzZO569KHrXCddXa9cn50RIwAqZ4psTQR9lpz1NYf7HUoSTNFxPcI~tvga6sRAUm9FgCI18oqgbwuNdUYO-JwnglLtIlfMhGlSSGTCQrsSs~2HkxlY~gt4fyZXyTuD0-t3bkNxu1gdrwT28qABcXvhUkaJwUd3bxCx6YEzytPiiL6IgYMwCqVO9SpfurxRUTaFh1YdorYiIFSH3RJwdzWzJJlorrqCcjbF5V0SV3aL8dEcEguRCUEHw-Wb7jfTHG~Rb0tlUrgvkkRxHgqFMxIk1IHPV4zbJARow8uCs9gUkE3~ujY0kn7BTBw2vble0Mg__&Key-Pair-Id=KL5I0C8H7HX83",
+        "pre_remeshed_glb": "https://assets.meshy.ai/15e506ed-ab04-4cf2-8c12-963f3a5087d1/tasks/019baa0c-b412-7087-bb6d-2f1e47e72779/output/pre_remeshed_model.glb?Expires=1768344052&Signature=MRDOo5r5bjXIIeyK7D8BRllZXp-9UvOHipdOQx2ufr2nCDGORcdqUecj3HbxEMNP~SVepHEejPXkUuaowYZdowcS~iXQC3wztAdomq6q~jo1XzWoU94LpOmntm3W6Ui8UhGAHXMfUl0EUFjWlYd6UCWPz7rSDQuaOfVzput9hT87THwkOsrHXbBJwhyuvouAp92rvnfMww1Y9JtrKp1Ki1ospRS6ou0dThFWTT0XDpePJwA8z9CEloF2p7xxlEd~Cy-wJI3q9L1GasrpjF0lfFBdfywWq3JwKedxISQRMXqqeyCL7eJ~G7t64GqFBiP0xeahqZe~OvXHGDqrkhPvtg__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "local_glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\generated_components\\20260111_040309\\Round_Brilliant_Emerald_3d.glb"
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "The provided image shows the ring from a strict side profile, hiding the number of stones. For 3D reconstruction, assuming a standard 5-stone or 7-stone partial eternity layout is safest. The engraving 'adhav' is a laser marking applied post-finishing and does not need to be part of the physical geometry prompt for the casting."
+}

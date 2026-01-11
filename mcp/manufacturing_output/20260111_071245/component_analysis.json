@@ -1,0 +1,59 @@
+{
+  "product_name": "Seven-Stone Shared-Prong Emerald Ring",
+  "product_category": "Fine Jewelry",
+  "overall_description": "A classic half-eternity style ring featuring a yellow gold band set with seven round-cut green gemstones (emeralds or tsavorites) held in a shared-prong basket setting with an open gallery side profile.",
+  "components": [
+    {
+      "component_id": 1,
+      "component_name": "Gold Ring Mounting (Shank and Setting)",
+      "component_type": "structural",
+      "image_generation_prompt": {
+        "main_prompt": "A single isolated 3D model of an empty yellow gold ring mounting. The object is a continuous piece of metal consisting of a polished half-round shank that transitions into a seven-stone gallery setting at the top. The setting area contains seven circular seats (bezels) with vertical shared prongs rising between each seat. There are no gemstones present, only the empty metal framework. The side profile reveals a scalloped 'U' shape gallery allowing light through the side. The material is 18k yellow gold with a high-gloss mirror polish, showing realistic metallic reflections and smooth surface continuity.",
+        "style_modifiers": "Product photography, macro lens, white studio background, high fidelity 3D asset style",
+        "negative_prompt": "gemstones, diamonds, silver, scratches, inclusions, background clutter, text, multiple rings",
+        "camera_angle": "Perspective view, slightly elevated 3/4 angle to show both the empty seats and the side profile",
+        "lighting_description": "Soft studio lighting to highlight the curvature of the gold and the precision of the prongs"
+      },
+      "material_suggestion": "18K Yellow Gold (Cast)",
+      "shape_description": "Torus-shaped band merging into a linear array of circular baskets with vertical prongs.",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "cylindrical"
+      },
+      "position": "Base structure",
+      "connections": [
+        "2"
+      ],
+      "manufacturing_notes": "Produced via lost-wax casting. The sprue should be attached at the bottom of the shank. Requires careful polishing of the gallery before stone setting."
+    },
+    {
+      "component_id": 2,
+      "component_name": "Round Brilliant Cut Emerald",
+      "component_type": "decorative",
+      "image_generation_prompt": {
+        "main_prompt": "A single, isolated round brilliant cut emerald gemstone. The object is a faceted mineral with a deep, vibrant green color. It features a flat top table, crown facets, a girdle, and a pointed pavilion. The material is translucent and glassy with a high refractive index, displaying internal light reflection and slight natural inclusions characteristic of emeralds. The edges are sharp and geometrically precise. No metal holding it, floating in space against a solid background.",
+        "style_modifiers": "Gemological macro photography, caustics rendering, neutral gray background, ray-traced look",
+        "negative_prompt": "metal, ring, prongs, blue, red, opaque, rough stone, jewelry setting",
+        "camera_angle": "Side view tilted 45 degrees to show both the crown and pavilion depth",
+        "lighting_description": "Backlit and top-lit to showcase translucency and facet scintillation"
+      },
+      "material_suggestion": "Natural Emerald or Tsavorite Garnet",
+      "shape_description": "Round brilliant cone shape (57-58 facets).",
+      "dimensions_estimate": {
+        "relative_size": "small",
+        "shape_type": "spherical"
+      },
+      "position": "Mounted into the seats of Component 1",
+      "connections": [
+        "1"
+      ],
+      "manufacturing_notes": "Precision lapidary cutting required. Diameter must match the seat size of the gold mounting (approx 3.0mm - 3.5mm)."
+    }
+  ],
+  "assembly_order": [
+    "1",
+    "2"
+  ],
+  "complexity_rating": "moderate",
+  "additional_notes": "This design utilizes a shared-prong mechanism where one set of prongs holds two adjacent stones, reducing metal visibility and maximizing gemstone brilliance. Manufacturing requires high-precision casting to ensuring prong tips are substantial enough to be bent over the stone girdles without cracking."
+}

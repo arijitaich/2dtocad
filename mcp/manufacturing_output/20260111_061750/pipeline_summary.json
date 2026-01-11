@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-01-11 06:21:00",
+  "input_folder": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples",
+  "output_directory": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750",
+  "square_size": 0.5,
+  "3d_engine": "hunyuan3d-2",
+  "image_selection": {
+    "best_image": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\design_samples\\Gemini_Generated_Image_yxd9qcyxd9qcyxd9.png",
+    "best_score": 96,
+    "total_evaluated": 3,
+    "reason": "Excellent image for 3D reconstruction. Clear object, simple background, and good lighting allow for effective depth perception and isolation."
+  },
+  "product_name": "Seven-Stone Emerald Shared-Prong Ring",
+  "components_detected": 2,
+  "component_images": [
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750\\component_images\\component_1_Ring_Mounting__Shank___Settings_.png",
+    "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750\\component_images\\component_2_Round_Brilliant_Gemstone.png"
+  ],
+  "generated_3d": [
+    {
+      "component_name": "Ring Mounting (Shank & Settings)",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750\\3d_models\\Ring_Mounting__Shank___Settings__3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750\\3d_models\\Ring_Mounting__Shank___Settings__3d.obj",
+      "generation_time": 32.4702570438385
+    },
+    {
+      "component_name": "Round Brilliant Gemstone",
+      "glb_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750\\3d_models\\Round_Brilliant_Gemstone_3d.glb",
+      "obj_path": "C:\\Users\\MSILAPTOP\\Repo\\Part 2\\3D Structure Design\\mcp\\manufacturing_output\\20260111_061750\\3d_models\\Round_Brilliant_Gemstone_3d.obj",
+      "generation_time": 30.10794997215271
+    }
+  ],
+  "tessellated": []
+}
